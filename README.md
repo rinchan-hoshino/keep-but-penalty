@@ -30,6 +30,8 @@ Useful options:
 - `death.experienceKeepRatio`
 - `death.enableRespawnDebuffs`
 - `death.respawnDebuffDurationSeconds`
+- `death.respawnWeaknessLevel`
+- `death.respawnMiningFatigueLevel`
 - `durability.durabilityLoss`
 - `durability.damageArmor`
 - `durability.damageMainHand`

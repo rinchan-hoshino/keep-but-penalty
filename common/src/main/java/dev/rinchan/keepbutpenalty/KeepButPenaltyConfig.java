@@ -10,6 +10,8 @@ public final class KeepButPenaltyConfig {
     public static final ModConfigSpec.DoubleValue experienceKeepRatio;
     public static final ModConfigSpec.BooleanValue enableRespawnDebuffs;
     public static final ModConfigSpec.IntValue respawnDebuffDurationSeconds;
+    public static final ModConfigSpec.IntValue respawnWeaknessLevel;
+    public static final ModConfigSpec.IntValue respawnMiningFatigueLevel;
     public static final ModConfigSpec.BooleanValue enableDurabilityPenalty;
     public static final ModConfigSpec.IntValue durabilityLoss;
     public static final ModConfigSpec.BooleanValue allowZeroDurability;
@@ -33,11 +35,17 @@ public final class KeepButPenaltyConfig {
             .comment("Fraction of total vanilla experience kept after death. Default 0.333333333 keeps one third and removes two thirds.")
             .defineInRange("experienceKeepRatio", 0.333333333D, 0D, 1D);
         enableRespawnDebuffs = builder
-            .comment("Apply vanilla Weakness I and Mining Fatigue I after a death respawn. Returning from the End does not trigger this penalty.")
+            .comment("Apply configurable vanilla Weakness and Mining Fatigue after a death respawn. Returning from the End does not trigger this penalty.")
             .define("enableRespawnDebuffs", true);
         respawnDebuffDurationSeconds = builder
             .comment("Shared duration in seconds of the vanilla respawn debuffs.")
             .defineInRange("respawnDebuffDurationSeconds", 60, 1, 86400);
+        respawnWeaknessLevel = builder
+            .comment("Vanilla Weakness level applied after respawning. 1 is Weakness I, 2 is Weakness II, and so on.")
+            .defineInRange("respawnWeaknessLevel", 1, 1, 256);
+        respawnMiningFatigueLevel = builder
+            .comment("Vanilla Mining Fatigue level applied after respawning. 1 is Mining Fatigue I, 2 is Mining Fatigue II, and so on.")
+            .defineInRange("respawnMiningFatigueLevel", 1, 1, 256);
         builder.pop();
 
         builder.push("durability");

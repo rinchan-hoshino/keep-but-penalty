@@ -88,16 +88,24 @@ public final class KeepButPenalty {
         if (!KeepButPenaltyConfig.enableRespawnDebuffs.get()) {
             return;
         }
-        for (var effect : createRespawnDebuffs(KeepButPenaltyConfig.respawnDebuffDurationSeconds.get())) {
+        for (var effect : createRespawnDebuffs(
+            KeepButPenaltyConfig.respawnDebuffDurationSeconds.get(),
+            KeepButPenaltyConfig.respawnWeaknessLevel.get(),
+            KeepButPenaltyConfig.respawnMiningFatigueLevel.get()
+        )) {
             player.addEffect(effect);
         }
     }
 
-    static List<MobEffectInstance> createRespawnDebuffs(int durationSeconds) {
+    static List<MobEffectInstance> createRespawnDebuffs(
+        int durationSeconds,
+        int weaknessLevel,
+        int miningFatigueLevel
+    ) {
         int durationTicks = durationSeconds * 20;
         return List.of(
-            new MobEffectInstance(MobEffects.WEAKNESS, durationTicks, 0),
-            new MobEffectInstance(MobEffects.DIG_SLOWDOWN, durationTicks, 0)
+            new MobEffectInstance(MobEffects.WEAKNESS, durationTicks, weaknessLevel - 1),
+            new MobEffectInstance(MobEffects.DIG_SLOWDOWN, durationTicks, miningFatigueLevel - 1)
         );
     }
 
