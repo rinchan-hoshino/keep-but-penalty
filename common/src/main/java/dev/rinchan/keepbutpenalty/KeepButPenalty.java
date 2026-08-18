@@ -84,18 +84,21 @@ public final class KeepButPenalty {
         }
     }
 
-    public static void applyRespawnWeakness(ServerPlayer player) {
-        if (!KeepButPenaltyConfig.enableRespawnWeakness.get()) {
+    public static void applyRespawnDebuffs(ServerPlayer player) {
+        if (!KeepButPenaltyConfig.enableRespawnDebuffs.get()) {
             return;
         }
-        player.addEffect(createRespawnWeakness(
-            KeepButPenaltyConfig.respawnWeaknessDurationSeconds.get(),
-            KeepButPenaltyConfig.respawnWeaknessAmplifier.get()
-        ));
+        for (var effect : createRespawnDebuffs(KeepButPenaltyConfig.respawnDebuffDurationSeconds.get())) {
+            player.addEffect(effect);
+        }
     }
 
-    static MobEffectInstance createRespawnWeakness(int durationSeconds, int amplifier) {
-        return new MobEffectInstance(MobEffects.WEAKNESS, durationSeconds * 20, amplifier);
+    static List<MobEffectInstance> createRespawnDebuffs(int durationSeconds) {
+        int durationTicks = durationSeconds * 20;
+        return List.of(
+            new MobEffectInstance(MobEffects.WEAKNESS, durationTicks, 0),
+            new MobEffectInstance(MobEffects.DIG_SLOWDOWN, durationTicks, 0)
+        );
     }
 
     public static void clearPlayer(UUID playerId) {

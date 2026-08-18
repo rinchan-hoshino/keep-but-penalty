@@ -8,9 +8,8 @@ public final class KeepButPenaltyConfig {
     public static final ModConfigSpec.BooleanValue keepInventory;
     public static final ModConfigSpec.BooleanValue enableExperiencePenalty;
     public static final ModConfigSpec.DoubleValue experienceKeepRatio;
-    public static final ModConfigSpec.BooleanValue enableRespawnWeakness;
-    public static final ModConfigSpec.IntValue respawnWeaknessDurationSeconds;
-    public static final ModConfigSpec.IntValue respawnWeaknessAmplifier;
+    public static final ModConfigSpec.BooleanValue enableRespawnDebuffs;
+    public static final ModConfigSpec.IntValue respawnDebuffDurationSeconds;
     public static final ModConfigSpec.BooleanValue enableDurabilityPenalty;
     public static final ModConfigSpec.IntValue durabilityLoss;
     public static final ModConfigSpec.BooleanValue allowZeroDurability;
@@ -33,15 +32,12 @@ public final class KeepButPenaltyConfig {
         experienceKeepRatio = builder
             .comment("Fraction of total vanilla experience kept after death. Default 0.333333333 keeps one third and removes two thirds.")
             .defineInRange("experienceKeepRatio", 0.333333333D, 0D, 1D);
-        enableRespawnWeakness = builder
-            .comment("Apply the vanilla Weakness effect after a death respawn. Returning from the End does not trigger this penalty.")
-            .define("enableRespawnWeakness", true);
-        respawnWeaknessDurationSeconds = builder
-            .comment("Duration in seconds of the vanilla Weakness effect applied after respawning.")
-            .defineInRange("respawnWeaknessDurationSeconds", 180, 1, 86400);
-        respawnWeaknessAmplifier = builder
-            .comment("Vanilla Weakness amplifier. 0 is Weakness I, 1 is Weakness II, and so on.")
-            .defineInRange("respawnWeaknessAmplifier", 0, 0, 255);
+        enableRespawnDebuffs = builder
+            .comment("Apply vanilla Weakness I and Mining Fatigue I after a death respawn. Returning from the End does not trigger this penalty.")
+            .define("enableRespawnDebuffs", true);
+        respawnDebuffDurationSeconds = builder
+            .comment("Shared duration in seconds of the vanilla respawn debuffs.")
+            .defineInRange("respawnDebuffDurationSeconds", 60, 1, 86400);
         builder.pop();
 
         builder.push("durability");
