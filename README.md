@@ -4,13 +4,14 @@
 
 Keep But Penalty is a lightweight NeoForge mod for packs and servers that want to avoid item drops, grave recovery loops, or corpse runs without making death free.
 
-When a player dies, the mod can keep their inventory, remove part of their vanilla experience, and damage equipped items.
+When a player dies, the mod can keep their inventory, remove part of their vanilla experience, damage equipped items, and apply vanilla Weakness after respawning.
 
 ## Default behavior
 
 - Keeps player inventory on death without changing the vanilla `keepInventory` gamerule.
 - Keeps one third of total vanilla experience after death.
 - Removes two thirds of total vanilla experience after death.
+- Applies vanilla Weakness I for three minutes after a death respawn.
 - Applies 80 durability damage to selected equipped items.
 - Includes armor, main hand, off hand, Curios slots, and Accessories slots by default.
 - Allows items to reach 0 durability, so it pairs well with no-break mods such as Keep My Sword.
@@ -27,6 +28,9 @@ Useful options:
 
 - `death.keepInventory`
 - `death.experienceKeepRatio`
+- `death.enableRespawnWeakness`
+- `death.respawnWeaknessDurationSeconds`
+- `death.respawnWeaknessAmplifier`
 - `durability.durabilityLoss`
 - `durability.damageArmor`
 - `durability.damageMainHand`

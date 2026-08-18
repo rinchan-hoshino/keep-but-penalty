@@ -54,6 +54,9 @@ public class KeepButPenaltyNeoForge {
     private void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
             KeepButPenalty.finishRespawn(player);
+            if (!event.isEndConquered()) {
+                KeepButPenalty.applyRespawnWeakness(player);
+            }
         }
     }
 

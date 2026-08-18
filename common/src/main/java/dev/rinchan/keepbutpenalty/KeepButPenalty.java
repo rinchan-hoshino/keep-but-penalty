@@ -11,6 +11,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -80,6 +82,20 @@ public final class KeepButPenalty {
                 player.giveExperiencePoints(remainingXp);
             }
         }
+    }
+
+    public static void applyRespawnWeakness(ServerPlayer player) {
+        if (!KeepButPenaltyConfig.enableRespawnWeakness.get()) {
+            return;
+        }
+        player.addEffect(createRespawnWeakness(
+            KeepButPenaltyConfig.respawnWeaknessDurationSeconds.get(),
+            KeepButPenaltyConfig.respawnWeaknessAmplifier.get()
+        ));
+    }
+
+    static MobEffectInstance createRespawnWeakness(int durationSeconds, int amplifier) {
+        return new MobEffectInstance(MobEffects.WEAKNESS, durationSeconds * 20, amplifier);
     }
 
     public static void clearPlayer(UUID playerId) {
