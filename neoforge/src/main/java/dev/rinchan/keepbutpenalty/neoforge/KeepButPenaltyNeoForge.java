@@ -2,8 +2,11 @@ package dev.rinchan.keepbutpenalty.neoforge;
 
 import dev.rinchan.keepbutpenalty.KeepButPenalty;
 import dev.rinchan.keepbutpenalty.KeepButPenaltyConfig;
+import dev.rinchan.keepbutpenalty.compat.AccessoriesCompat;
+import dev.rinchan.keepbutpenalty.compat.CuriosCompat;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
@@ -19,6 +22,12 @@ public class KeepButPenaltyNeoForge {
         ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, KeepButPenaltyConfig.SPEC);
         NeoForge.EVENT_BUS.addListener(this::onLivingDeath);
         NeoForge.EVENT_BUS.addListener(this::onLivingDrops);
+        if (ModList.get().isLoaded("curios")) {
+            CuriosCompat.registerKeepRule();
+        }
+        if (ModList.get().isLoaded("accessories")) {
+            AccessoriesCompat.registerKeepRule();
+        }
         NeoForge.EVENT_BUS.addListener(this::onLivingExperienceDrop);
         NeoForge.EVENT_BUS.addListener(this::onPlayerClone);
         NeoForge.EVENT_BUS.addListener(this::onPlayerRespawn);
