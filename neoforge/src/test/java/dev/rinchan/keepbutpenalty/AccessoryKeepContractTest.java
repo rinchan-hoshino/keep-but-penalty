@@ -3,43 +3,37 @@ package dev.rinchan.keepbutpenalty;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 class AccessoryKeepContractTest {
     @Test
-    void keepInventoryUsesEachAccessorySystemsNativeKeepRule() throws IOException {
-        String curios = readSource(
-            "common/src/main/java/dev/rinchan/keepbutpenalty/compat/CuriosCompat.java"
-        );
-        assertTrue(curios.contains("event.addOverride(stack -> true, ICurio.DropRule.ALWAYS_KEEP)"));
+    void vanillaKeepInventoryOwnsAllDropAndCloneSemantics() throws Exception {
+        String common = readSource("common/src/main/java/dev/rinchan/keepbutpenalty/KeepButPenalty.java");
+        String platform = readSource("neoforge/src/main/java/dev/rinchan/keepbutpenalty/neoforge/KeepButPenaltyNeoForge.java");
+        String curios = readSource("common/src/main/java/dev/rinchan/keepbutpenalty/compat/CuriosCompat.java");
+        String accessories = readSource("common/src/main/java/dev/rinchan/keepbutpenalty/compat/AccessoriesCompat.java");
 
-        String accessories = readSource(
-            "common/src/main/java/dev/rinchan/keepbutpenalty/compat/AccessoriesCompat.java"
-        );
-        assertTrue(accessories.contains("OnDropCallback.EVENT.register"));
-        assertTrue(accessories.contains("return DropRule.KEEP"));
-
-        String lifecycle = readSource(
-            "common/src/main/java/dev/rinchan/keepbutpenalty/KeepButPenalty.java"
-        );
-        assertFalse(lifecycle.contains("ACCESSORIES_AFTER_DEATH"));
-        assertTrue(lifecycle.contains("PERSISTED_INVENTORY_TAG"));
-        assertTrue(lifecycle.contains("persistInventory(player)"));
-        assertTrue(lifecycle.contains("restorePersistedInventory(newPlayer)"));
+        assertFalse(common.contains("INVENTORY_AFTER_DEATH"));
+        assertFalse(common.contains("PERSISTED_INVENTORY_TAG"));
+        assertFalse(platform.contains("LivingDropsEvent"));
+        assertFalse(platform.contains("PlayerEvent.Clone"));
+        assertFalse(curios.contains("DropRulesEvent"));
+        assertFalse(accessories.contains("OnDropCallback"));
+        assertTrue(common.contains("CuriosCompat.damageEquipped"));
+        assertTrue(common.contains("AccessoriesCompat.damageEquipped"));
     }
 
-    private static String readSource(String relative) throws IOException {
+    private static String readSource(String relative) throws Exception {
         Path current = Path.of("").toAbsolutePath();
         while (current != null) {
             Path candidate = current.resolve(relative);
-            if (Files.isRegularFile(candidate)) {
+            if (Files.exists(candidate)) {
                 return Files.readString(candidate);
             }
             current = current.getParent();
         }
-        throw new IOException("Unable to locate " + relative);
+        throw new IllegalStateException("Unable to find " + relative);
     }
 }

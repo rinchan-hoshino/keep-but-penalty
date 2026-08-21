@@ -5,7 +5,6 @@ import net.neoforged.neoforge.common.ModConfigSpec;
 public final class KeepButPenaltyConfig {
     public static final ModConfigSpec SPEC;
 
-    public static final ModConfigSpec.BooleanValue keepInventory;
     public static final ModConfigSpec.BooleanValue enableExperiencePenalty;
     public static final ModConfigSpec.DoubleValue experienceKeepRatio;
     public static final ModConfigSpec.BooleanValue enableRespawnDebuffs;
@@ -25,9 +24,6 @@ public final class KeepButPenaltyConfig {
         ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 
         builder.push("death");
-        keepInventory = builder
-            .comment("Keep player inventory on death while this mod is installed. This does not change the vanilla keepInventory gamerule.")
-            .define("keepInventory", true);
         enableExperiencePenalty = builder
             .comment("Reduce player experience after death.")
             .define("enableExperiencePenalty", true);
