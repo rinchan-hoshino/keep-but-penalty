@@ -26,6 +26,9 @@ class AccessoryKeepContractTest {
             "common/src/main/java/dev/rinchan/keepbutpenalty/KeepButPenalty.java"
         );
         assertFalse(lifecycle.contains("ACCESSORIES_AFTER_DEATH"));
+        assertTrue(lifecycle.contains("PERSISTED_INVENTORY_TAG"));
+        assertTrue(lifecycle.contains("persistInventory(player)"));
+        assertTrue(lifecycle.contains("restorePersistedInventory(newPlayer)"));
     }
 
     private static String readSource(String relative) throws IOException {

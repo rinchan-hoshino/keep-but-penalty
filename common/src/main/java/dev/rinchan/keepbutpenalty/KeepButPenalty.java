@@ -10,6 +10,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -21,6 +23,7 @@ import net.neoforged.fml.ModList;
 
 public final class KeepButPenalty {
     public static final String MOD_ID = "keep_but_penalty";
+    private static final String PERSISTED_INVENTORY_TAG = MOD_ID + ":inventory_after_death";
     private static final Map<UUID, Integer> XP_AFTER_DEATH = new ConcurrentHashMap<>();
     private static final Map<UUID, List<ItemStack>> INVENTORY_AFTER_DEATH = new ConcurrentHashMap<>();
 
@@ -57,6 +60,7 @@ public final class KeepButPenalty {
 
         if (KeepButPenaltyConfig.keepInventory.get()) {
             INVENTORY_AFTER_DEATH.put(player.getUUID(), copyInventory(player.getInventory()));
+            persistInventory(player);
         }
     }
 
@@ -68,8 +72,11 @@ public final class KeepButPenalty {
         List<ItemStack> savedInventory = INVENTORY_AFTER_DEATH.remove(newPlayer.getUUID());
         if (savedInventory != null) {
             restoreInventory(newPlayer.getInventory(), savedInventory);
-            newPlayer.inventoryMenu.broadcastChanges();
+        } else {
+            restorePersistedInventory(newPlayer);
         }
+        clearPersistedInventory(newPlayer);
+        newPlayer.inventoryMenu.broadcastChanges();
     }
 
     public static void finishRespawn(ServerPlayer player) {
@@ -125,6 +132,25 @@ public final class KeepButPenalty {
         int limit = KeepButPenaltyConfig.allowZeroDurability.get() ? maxDamage : Math.max(0, maxDamage - 1);
         int nextDamage = Math.min(limit, stack.getDamageValue() + KeepButPenaltyConfig.durabilityLoss.get());
         stack.setDamageValue(nextDamage);
+    }
+
+    private static void persistInventory(ServerPlayer player) {
+        CompoundTag persisted = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
+        persisted.put(PERSISTED_INVENTORY_TAG, player.getInventory().save(new ListTag()));
+        player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persisted);
+    }
+
+    private static void restorePersistedInventory(ServerPlayer player) {
+        CompoundTag persisted = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
+        if (persisted.get(PERSISTED_INVENTORY_TAG) instanceof ListTag inventoryTag) {
+            player.getInventory().load(inventoryTag);
+        }
+    }
+
+    private static void clearPersistedInventory(ServerPlayer player) {
+        CompoundTag persisted = player.getPersistentData().getCompound(Player.PERSISTED_NBT_TAG);
+        persisted.remove(PERSISTED_INVENTORY_TAG);
+        player.getPersistentData().put(Player.PERSISTED_NBT_TAG, persisted);
     }
 
     private static List<ItemStack> copyInventory(Inventory inventory) {
