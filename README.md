@@ -44,3 +44,8 @@ Useful options:
 - NeoForge
 
 Curios and Accessories are optional. If installed, their equipped item slots can be included in the durability penalty.
+
+## Downloads
+
+- [Modrinth](https://modrinth.com/mod/keep-but-penalty)
+- [GitHub Releases](https://github.com/rinchan-hoshino/keep-but-penalty/releases)
