@@ -6,18 +6,24 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Set;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.neoforged.fml.ModList;
 
 public final class KeepButPenalty {
     public static final String MOD_ID = "keep_but_penalty";
 
     private KeepButPenalty() {
+    }
+
+    public static void publishInventoryRetention(MinecraftServer server) {
+        server.getGameRules().getRule(GameRules.RULE_KEEPINVENTORY).set(true, server);
     }
 
     public static void applyDeathPenalty(ServerPlayer player) {

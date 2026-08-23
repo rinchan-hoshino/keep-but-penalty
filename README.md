@@ -8,7 +8,7 @@ When a player dies, the mod can keep their inventory, remove part of their vanil
 
 ## Default behavior
 
-- Keeps player inventory on death without changing the vanilla `keepInventory` gamerule.
+- Publishes the vanilla `keepInventory=true` gamerule when the server starts, then leaves vanilla drop and clone semantics in charge.
 - Keeps one third of total vanilla experience after death.
 - Removes two thirds of total vanilla experience after death.
 - Applies vanilla Weakness I and Mining Fatigue I for one minute after a death respawn.
@@ -26,7 +26,6 @@ config/keep_but_penalty-common.toml
 
 Useful options:
 
-- `death.keepInventory`
 - `death.experienceKeepRatio`
 - `death.enableRespawnDebuffs`
 - `death.respawnDebuffDurationSeconds`

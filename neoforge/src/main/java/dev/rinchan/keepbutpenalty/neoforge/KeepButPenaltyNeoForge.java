@@ -10,13 +10,19 @@ import net.neoforged.fml.config.ModConfig;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
 
 @Mod(KeepButPenalty.MOD_ID)
 public class KeepButPenaltyNeoForge {
     public KeepButPenaltyNeoForge(IEventBus modBus) {
         ModLoadingContext.get().getActiveContainer().registerConfig(ModConfig.Type.COMMON, KeepButPenaltyConfig.SPEC);
+        NeoForge.EVENT_BUS.addListener(this::onServerStarted);
         NeoForge.EVENT_BUS.addListener(this::onLivingDeath);
         NeoForge.EVENT_BUS.addListener(this::onPlayerRespawn);
+    }
+
+    private void onServerStarted(ServerStartedEvent event) {
+        KeepButPenalty.publishInventoryRetention(event.getServer());
     }
 
     private void onLivingDeath(LivingDeathEvent event) {
