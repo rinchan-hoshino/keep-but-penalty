@@ -1,0 +1,10 @@
+import groovy.json.JsonSlurper
+
+String requestedProfile = providers.gradleProperty('profile').orElse('1.21.1').get()
+File profileFile = file('support/mainstream-profiles.json')
+Map profiles = (Map) new JsonSlurper().parse(profileFile).profiles
+Map selected = (Map) profiles[requestedProfile]
+if (selected == null) {
+    throw new GradleException("Unknown mainstream profile '${requestedProfile}'. Available: ${profiles.keySet().sort().join(', ')}")
+}
+selected.each { key, value -> rootProject.ext.set(key as String, value as String) }

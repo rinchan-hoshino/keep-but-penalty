@@ -15,6 +15,7 @@ sourceSets.main.resources.srcDir tasks.register('generateModMetadata', ProcessRe
         minecraft_version_range: rootProject.minecraft_version_range,
         neo_version_range      : rootProject.neo_version_range,
         loader_version_range   : rootProject.loader_version_range,
+        rinlib_version_range   : "[${rootProject.rinlib_version},)",
         mod_id                 : rootProject.mod_id,
         mod_name               : rootProject.mod_name,
         mod_license            : rootProject.mod_license,
@@ -55,11 +56,16 @@ neoForge {
 neoForge.ideSyncTask tasks.named('generateModMetadata')
 
 dependencies {
+    implementation "dev.rinchan:rinlib-neoforge:${rootProject.rinlib_version}"
     compileOnly "maven.modrinth:curios:${rootProject.curios_version}"
     compileOnly "maven.modrinth:accessories:${rootProject.accessories_version}"
-    runtimeOnly "maven.modrinth:curios:${rootProject.curios_version}"
-    runtimeOnly "maven.modrinth:accessories:${rootProject.accessories_version}"
-    runtimeOnly "maven.modrinth:owo-lib:${rootProject.owo_version}"
+    if (providers.gradleProperty('withCurios').isPresent()) {
+        runtimeOnly "maven.modrinth:curios:${rootProject.curios_version}"
+    }
+    if (providers.gradleProperty('withAccessories').isPresent()) {
+        runtimeOnly "maven.modrinth:accessories:${rootProject.accessories_version}"
+        runtimeOnly "maven.modrinth:owo-lib:${rootProject.owo_version}"
+    }
 
     testImplementation platform("org.junit:junit-bom:5.14.4")
     testImplementation "org.junit.jupiter:junit-jupiter"

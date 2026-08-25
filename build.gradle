@@ -1,10 +1,17 @@
 plugins {
-    id 'net.neoforged.moddev' version '2.0.91' apply false
+    id 'net.neoforged.moddev' version '2.0.141' apply false
 }
+
+apply from: 'mainstream-profile.gradle'
 
 subprojects {
     group = rootProject.mod_group_id
     version = rootProject.mod_version
+
+    tasks.withType(AbstractArchiveTask).configureEach {
+        preserveFileTimestamps = false
+        reproducibleFileOrder = true
+    }
 
     repositories {
         mavenLocal()

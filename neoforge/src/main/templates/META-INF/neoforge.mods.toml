@@ -2,6 +2,9 @@ modLoader="javafml"
 loaderVersion="${loader_version_range}"
 license="${mod_license}"
 
+[[mixins]]
+config="keep_but_penalty.mixins.json"
+
 [[mods]]
 modId="${mod_id}"
 version="${mod_version}"
@@ -21,6 +24,13 @@ modId="minecraft"
 type="required"
 versionRange="${minecraft_version_range}"
 ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="rinlib"
+type="required"
+versionRange="${rinlib_version_range}"
+ordering="BEFORE"
 side="BOTH"
 
 [[dependencies.${mod_id}]]

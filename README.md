@@ -1,49 +1,68 @@
 # Keep But Penalty
 
-**Keep your inventory. Pay a real death penalty.**
+**Keep your inventory. Choose the cost of death.**
 
-Keep But Penalty is a lightweight NeoForge mod for packs and servers that want to avoid item drops, grave recovery loops, or corpse runs without making death free.
-
-When a player dies, the mod can keep their inventory, remove part of their vanilla experience, damage equipped items, and apply vanilla combat debuffs after respawning.
+Keep But Penalty is a lightweight server-side NeoForge mod for packs and servers that want vanilla-owned inventory retention without grave recovery loops or persistent world-rule changes.
 
 ## Default behavior
 
-- Publishes the vanilla `keepInventory=true` gamerule when the server starts, then leaves vanilla drop and clone semantics in charge.
-- Keeps one third of total vanilla experience after death.
-- Removes two thirds of total vanilla experience after death.
-- Applies vanilla Weakness I and Mining Fatigue I for one minute after a death respawn.
-- Applies 80 durability damage to selected equipped items.
-- Includes armor, main hand, off hand, Curios slots, and Accessories slots by default.
-- Allows items to reach 0 durability, so it pairs well with no-break mods such as Keep My Sword.
+- Keeps player inventory through a death-scoped projection of vanilla `keepInventory` behavior.
+- Does not modify or save the world's real `keepInventory` gamerule.
+- Does not copy inventories or own item drops/player clones.
+- Applies no experience, durability, or respawn-effect penalty by default.
 
-## Configuration
+## Optional penalties
 
-Config file:
+The common config can enable:
 
-```text
-config/keep_but_penalty-common.toml
+- A retained fraction of total vanilla experience.
+- Direct durability loss for armor, hands, Curios, and Accessories equipment.
+- Any configured respawn debuffs using `effect_id,duration_seconds,level` entries.
+
+Example:
+
+```toml
+[death]
+keepInventory = true
+enableExperiencePenalty = true
+experienceKeepRatio = 0.333333333
+respawnDebuffs = [
+  "minecraft:weakness,60,1",
+  "minecraft:mining_fatigue,60,1"
+]
+
+[durability]
+enableDurabilityPenalty = false
+durabilityLoss = 80
 ```
 
-Useful options:
+Curios and Accessories are optional. Their equipped slots participate only when the corresponding mod is installed and durability penalties are enabled.
 
-- `death.experienceKeepRatio`
-- `death.enableRespawnDebuffs`
-- `death.respawnDebuffDurationSeconds`
-- `death.respawnWeaknessLevel`
-- `death.respawnMiningFatigueLevel`
-- `durability.durabilityLoss`
-- `durability.damageArmor`
-- `durability.damageMainHand`
-- `durability.damageOffHand`
-- `durability.damageCurios`
-- `durability.damageAccessories`
+## Supported versions
 
-## Requirements
+The 1.0.0 release uses one Keep But Penalty source line for the mainstream NeoForge targets that pass the same contract:
 
 - Minecraft 1.21.1
-- NeoForge
+- Minecraft 1.21.4
+- Minecraft 1.21.5
+- Minecraft 1.21.8
+- Minecraft 1.21.11
 
-Curios and Accessories are optional. If installed, their equipped item slots can be included in the durability penalty.
+RinLib 0.3.0 or newer is required.
+
+## Upgrading from 0.1.6
+
+Version 0.1.6 wrote `keepInventory=true` into existing worlds. Version 1.0.0 never mutates that rule and cannot infer the administrator's original intent. Reset legacy worlds once if the vanilla baseline should be restored:
+
+```mcfunction
+/gamerule keepInventory false
+```
+
+Minecraft 1.21.11 uses the renamed rule key:
+
+```mcfunction
+/gamerule minecraft:keep_inventory false
+```
 
 ## Downloads
 
