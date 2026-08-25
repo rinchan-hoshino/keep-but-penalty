@@ -40,25 +40,23 @@ Curios and Accessories are optional. Their equipped slots participate only when 
 
 ## Supported versions
 
-The 1.0.0 release uses one Keep But Penalty source line for the mainstream NeoForge targets that pass the same contract:
+The maintained release matrix follows modpack anchor versions rather than every Minecraft point release. One Keep But Penalty source line supports:
 
 - Minecraft 1.21.1
-- Minecraft 1.21.4
-- Minecraft 1.21.5
-- Minecraft 1.21.8
-- Minecraft 1.21.11
+- Minecraft 26.1.2
+- Minecraft 26.2
 
-RinLib 0.3.0 or newer is required.
+RinLib 0.3.1 or newer is required.
 
 ## Upgrading from 0.1.6
 
-Version 0.1.6 wrote `keepInventory=true` into existing worlds. Version 1.0.0 never mutates that rule and cannot infer the administrator's original intent. Reset legacy worlds once if the vanilla baseline should be restored:
+Version 0.1.6 wrote `keepInventory=true` into existing worlds. Stable releases never mutate that rule and cannot infer the administrator's original intent. Reset legacy worlds once if the vanilla baseline should be restored:
 
 ```mcfunction
 /gamerule keepInventory false
 ```
 
-Minecraft 1.21.11 uses the renamed rule key:
+Minecraft 26.x uses the renamed rule key:
 
 ```mcfunction
 /gamerule minecraft:keep_inventory false

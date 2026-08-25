@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1 — 2026-08-25
+
+- Maintain only the modpack anchor targets: NeoForge 1.21.1, 26.1.2, and 26.2.
+- Remove the non-anchor 1.21.4, 1.21.5, 1.21.8, and 1.21.11 publication targets.
+- Require RinLib 0.3.1 for the new 26.x state bridges.
+
 ## 1.0.0 — 2026-08-25
 
 - Keep inventory through a death/respawn-scoped gamerule projection without mutating or serializing the world's real rule.
