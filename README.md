@@ -27,9 +27,14 @@ keepInventory = true
 enableExperiencePenalty = true
 experienceKeepRatio = 0.333333333
 respawnDebuffs = [
-  "minecraft:weakness,60,1",
-  "minecraft:mining_fatigue,60,1"
+  "minecraft:weakness,60,2",
+  "minecraft:mining_fatigue,60,2",
+  "minecraft:slowness,60,2"
 ]
+# Optional progressive durations by consecutive final death. Empty keeps the
+# per-effect durations above. Entries beyond the list reuse its last value.
+respawnDebuffDurationsSecondsByDeath = [0, 5, 10, 15, 20]
+respawnDebuffStreakResetSeconds = 600
 
 [durability]
 enableDurabilityPenalty = false

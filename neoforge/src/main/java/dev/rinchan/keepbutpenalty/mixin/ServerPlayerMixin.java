@@ -2,6 +2,7 @@ package dev.rinchan.keepbutpenalty.mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import dev.rinchan.keepbutpenalty.DeathStreakAccess;
 import dev.rinchan.keepbutpenalty.KeepButPenaltyConfig;
 import dev.rinchan.rinlib.minecraft.KeepInventoryProjection;
 import dev.rinchan.rinlib.state.ReentrantFlag;
@@ -30,10 +31,14 @@ abstract class ServerPlayerMixin {
     ) {
         if (!KeepButPenaltyConfig.KEEP_INVENTORY.get() || keepEverything) {
             original.call(previous, keepEverything);
-            return;
+        } else {
+            try (ReentrantFlag.Scope ignored = KeepInventoryProjection.enter()) {
+                original.call(previous, false);
+            }
         }
-        try (ReentrantFlag.Scope ignored = KeepInventoryProjection.enter()) {
-            original.call(previous, false);
-        }
+        ((DeathStreakAccess) this).keepButPenalty$setDeathStreak(
+            ((DeathStreakAccess) previous).keepButPenalty$getDeathStreak()
+        );
     }
+
 }

@@ -54,10 +54,29 @@ public final class KeepButPenalty {
         }
     }
 
+    public static void recordFinalDeath(ServerPlayer player) {
+        DeathStreakAccess access = (DeathStreakAccess) player;
+        long resetTicks = KeepButPenaltyConfig.RESPAWN_DEBUFF_STREAK_RESET_SECONDS.get() * 20L;
+        access.keepButPenalty$setDeathStreak(DeathStreakPolicy.advance(
+            access.keepButPenalty$getDeathStreak(),
+            player.level().getGameTime(),
+            resetTicks
+        ));
+    }
+
     public static void applyRespawnDebuffs(ServerPlayer player) {
+        DeathStreakPolicy.State streak = ((DeathStreakAccess) player).keepButPenalty$getDeathStreak();
+        int scheduledSeconds = DeathStreakPolicy.durationSeconds(
+            KeepButPenaltyConfig.RESPAWN_DEBUFF_DURATIONS_SECONDS_BY_DEATH.get(),
+            streak.deaths()
+        );
+        if (scheduledSeconds == 0) {
+            return;
+        }
         for (String value : KeepButPenaltyConfig.RESPAWN_DEBUFFS.get()) {
             RespawnDebuffSpec spec = RespawnDebuffSpec.parse(value);
-            if (!MobEffectState.add(player, spec.effectId(), spec.durationTicks(), spec.amplifier())
+            int durationTicks = scheduledSeconds < 0 ? spec.durationTicks() : scheduledSeconds * 20;
+            if (!MobEffectState.add(player, spec.effectId(), durationTicks, spec.amplifier())
                     && UNKNOWN_DEBUFFS.add(spec.effectId())) {
                 System.getLogger(MOD_ID).log(System.Logger.Level.WARNING,
                         "Unknown configured respawn debuff: " + spec.effectId());

@@ -4,7 +4,8 @@
   "package": "dev.rinchan.keepbutpenalty.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "ServerPlayerMixin"
+    "ServerPlayerMixin",
+    "DeathStreakPersistenceMixin"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -9,6 +9,7 @@ base {
 }
 
 sourceSets.main.java.srcDir rootProject.file('common/src/main/java')
+sourceSets.main.java.srcDir rootProject.file("support/compat/${rootProject.minecraft_version}/java")
 sourceSets.main.resources.srcDir rootProject.file('common/src/main/resources')
 sourceSets.main.resources.srcDir tasks.register('generateModMetadata', ProcessResources) {
     def replaceProperties = [

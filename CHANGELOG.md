@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0 — 2026-08-29
+
+- Add an optional consecutive-final-death duration schedule for respawn debuffs.
+- Persist and clone the death streak, resetting it after a configurable survival window.
+- Observe uncancelled final deaths at NeoForge `LOWEST`, so downed/rescued players are not counted.
+- Preserve legacy fixed per-effect durations when the progressive schedule is empty.
+
 ## 1.0.1 — 2026-08-25
 
 - Maintain only the modpack anchor targets: NeoForge 1.21.1, 26.1.2, and 26.2.

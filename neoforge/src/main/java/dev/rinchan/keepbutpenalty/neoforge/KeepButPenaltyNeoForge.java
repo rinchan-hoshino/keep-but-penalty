@@ -6,6 +6,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
@@ -14,12 +15,13 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 public final class KeepButPenaltyNeoForge {
     public KeepButPenaltyNeoForge(ModContainer container) {
         container.registerConfig(ModConfig.Type.COMMON, KeepButPenaltyConfig.SPEC);
-        NeoForge.EVENT_BUS.addListener(KeepButPenaltyNeoForge::onLivingDeath);
+        NeoForge.EVENT_BUS.addListener(EventPriority.LOWEST, KeepButPenaltyNeoForge::onLivingDeath);
         NeoForge.EVENT_BUS.addListener(KeepButPenaltyNeoForge::onPlayerRespawn);
     }
 
     private static void onLivingDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {
+            KeepButPenalty.recordFinalDeath(player);
             KeepButPenalty.applyDeathPenalty(player);
         }
     }

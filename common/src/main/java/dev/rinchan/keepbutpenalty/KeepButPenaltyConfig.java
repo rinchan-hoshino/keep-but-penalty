@@ -9,6 +9,8 @@ public final class KeepButPenaltyConfig {
     public static final ModConfigSpec.BooleanValue ENABLE_EXPERIENCE_PENALTY;
     public static final ModConfigSpec.DoubleValue EXPERIENCE_KEEP_RATIO;
     public static final ModConfigSpec.ConfigValue<java.util.List<? extends String>> RESPAWN_DEBUFFS;
+    public static final ModConfigSpec.ConfigValue<java.util.List<? extends Integer>> RESPAWN_DEBUFF_DURATIONS_SECONDS_BY_DEATH;
+    public static final ModConfigSpec.IntValue RESPAWN_DEBUFF_STREAK_RESET_SECONDS;
 
     public static final ModConfigSpec.BooleanValue ENABLE_DURABILITY_PENALTY;
     public static final ModConfigSpec.IntValue DURABILITY_LOSS;
@@ -33,8 +35,14 @@ public final class KeepButPenaltyConfig {
                 .comment("Fraction of total experience retained after death.")
                 .defineInRange("experienceKeepRatio", 0.333333333D, 0.0D, 1.0D);
         RESPAWN_DEBUFFS = builder
-                .comment("Respawn debuffs as effect_id,duration_seconds,level. Empty means no respawn debuffs.")
+                .comment("Respawn debuffs as effect_id,duration_seconds,level. Empty means no respawn debuffs. The entry duration is used when the progressive schedule below is empty.")
                 .defineListAllowEmpty("respawnDebuffs", java.util.List.of(), () -> "minecraft:weakness,60,1", RespawnDebuffSpec::isValid);
+        RESPAWN_DEBUFF_DURATIONS_SECONDS_BY_DEATH = builder
+                .comment("Optional duration schedule by consecutive final death: first entry for first death, second for second death, and so on. Zero skips all configured debuffs for that death. Deaths beyond the list use its last duration. Empty preserves each respawnDebuffs entry duration.")
+                .defineListAllowEmpty("respawnDebuffDurationsSecondsByDeath", java.util.List.of(), () -> 0, DeathStreakPolicy::isValidDuration);
+        RESPAWN_DEBUFF_STREAK_RESET_SECONDS = builder
+                .comment("Seconds without a final death before the consecutive-death schedule starts over.")
+                .defineInRange("respawnDebuffStreakResetSeconds", 600, 1, 86_400);
         builder.pop();
 
         builder.push("durability");
