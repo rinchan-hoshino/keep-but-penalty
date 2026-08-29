@@ -32,6 +32,12 @@ final class DeathStreakPolicyTest {
     }
 
     @Test
+    void deathCountSaturatesInsteadOfWrappingAtTheIntegerLimit() {
+        var previous = new DeathStreakPolicy.State(Integer.MAX_VALUE, 1_000L);
+        assertEquals(Integer.MAX_VALUE, DeathStreakPolicy.advance(previous, 1_001L, 12_000L).deaths());
+    }
+
+    @Test
     void emptySchedulePreservesLegacyPerEffectDuration() {
         assertEquals(-1, DeathStreakPolicy.durationSeconds(List.of(), 4));
     }

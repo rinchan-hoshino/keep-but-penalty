@@ -12,7 +12,7 @@ public final class DeathStreakPolicy {
         boolean reset = previous.deaths() <= 0
             || currentGameTime < previous.lastDeathGameTime()
             || currentGameTime - previous.lastDeathGameTime() >= resetTicks;
-        int deaths = reset ? 1 : Math.min(Integer.MAX_VALUE, previous.deaths() + 1);
+        int deaths = reset ? 1 : (int) Math.min(Integer.MAX_VALUE, (long) previous.deaths() + 1L);
         return new State(deaths, currentGameTime);
     }
 
