@@ -16,7 +16,7 @@ class PublishedVersionContractTest {
             properties.load(reader);
         }
         String version = properties.getProperty("mod_version");
-        assertEquals("1.1.0+1.21.1", version);
+        assertEquals("1.1.1+1.21.1", version);
         assertFalse(version.contains("private"));
 
         String profiles = Files.readString(findProjectFile("support/mainstream-profiles.json"));

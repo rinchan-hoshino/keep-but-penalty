@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1 — 2026-08-29
+
+- Saturate consecutive-death counts at the integer limit instead of wrapping to zero after an imported or long-lived maximum streak.
+
 ## 1.1.0 — 2026-08-29
 
 - Add an optional consecutive-final-death duration schedule for respawn debuffs.
