@@ -26,7 +26,7 @@ public final class KeepButPenaltyConfig {
 
         builder.push("death");
         KEEP_INVENTORY = builder
-                .comment("Project keepInventory=true only while a player death or death-respawn call is executing. The world gamerule is never changed.")
+                .comment("Retain vanilla inventory and supported accessory slots at their death-drop boundaries. The world gamerule is never changed.")
                 .define("keepInventory", true);
         ENABLE_EXPERIENCE_PENALTY = builder
                 .comment("Reduce retained experience on actual death.")
