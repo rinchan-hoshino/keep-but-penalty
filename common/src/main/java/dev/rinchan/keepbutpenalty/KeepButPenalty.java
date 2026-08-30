@@ -92,8 +92,12 @@ public final class KeepButPenalty {
         if (maxDamage <= 0) {
             return;
         }
-        int limit = KeepButPenaltyConfig.ALLOW_ZERO_DURABILITY.get() ? maxDamage : Math.max(0, maxDamage - 1);
-        int nextDamage = Math.min(limit, stack.getDamageValue() + KeepButPenaltyConfig.DURABILITY_LOSS.get());
+        int nextDamage = DurabilityPenaltyPolicy.nextDamage(
+            stack.getDamageValue(),
+            maxDamage,
+            KeepButPenaltyConfig.DURABILITY_LOSS.get(),
+            KeepButPenaltyConfig.ALLOW_ZERO_DURABILITY.get()
+        );
         stack.setDamageValue(nextDamage);
     }
 

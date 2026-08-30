@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "repository": "keep-but-penalty",
+  "status": "not_executed",
+  "scenarios": [
+    {
+      "id": "death-lifecycle-conservation",
+      "owner": "NeoForge GameTest",
+      "status": "not_executed",
+      "prerequisites": [
+        "A test world with keepInventory=false",
+        "A ServerPlayer carrying named and component-bearing items, exact experience, and damaged equipment",
+        "Default configuration followed by experience and durability penalties enabled"
+      ],
+      "steps": [
+        "Record the real keepInventory rule, inventory, experience, equipment damage, effects, and dropped entities",
+        "Execute a real final death, clone, and respawn with default configuration",
+        "Repeat with a known experience ratio and durability loss, including Integer.MAX_VALUE loss"
+      ],
+      "assertions": [
+        "The real keepInventory rule is unchanged after every success or exception path",
+        "Default configuration changes none of experience, durability, or effects and creates no item drops",
+        "Enabled experience retention equals floor(totalExperience * ratio)",
+        "Each stack identity is damaged at most once and damage remains within the configured durability boundary"
+      ],
+      "covers": ["KBP-I1", "KBP-I2", "KBP-I3", "KBP-I4", "KBP-I5", "KBP-I9"]
+    },
+    {
+      "id": "death-streak-persistence",
+      "owner": "NeoForge GameTest with save/reload",
+      "status": "not_executed",
+      "prerequisites": [
+        "Each supported source profile",
+        "A player with a non-empty death streak"
+      ],
+      "steps": [
+        "Save player data and reload it",
+        "Clone the player through a real death respawn",
+        "Advance game time to one tick before and exactly at resetTicks"
+      ],
+      "assertions": [
+        "deaths and lastDeathGameTime survive save/load and death clone exactly",
+        "The streak advances before resetTicks and resets exactly at resetTicks",
+        "A cancelled or non-final death does not advance the streak"
+      ],
+      "covers": ["KBP-I6", "KBP-I7", "KBP-I9", "KBP-I10"]
+    }
+  ]
+}

@@ -12,3 +12,4 @@ plugins {
 
 rootProject.name = 'keep-but-penalty'
 include 'neoforge'
+include 'policy'
