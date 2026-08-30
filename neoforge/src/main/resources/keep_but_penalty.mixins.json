@@ -5,7 +5,6 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "ServerPlayerMixin",
-    "PlayerMixin",
     "DeathStreakPersistenceMixin"
   ],
   "injectors": {

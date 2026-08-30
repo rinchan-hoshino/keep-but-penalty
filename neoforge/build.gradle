@@ -60,7 +60,6 @@ dependencies {
     implementation "dev.rinchan:rinlib-neoforge:${rootProject.rinlib_version}"
     compileOnly "maven.modrinth:curios:${rootProject.curios_version}"
     compileOnly "maven.modrinth:accessories:${rootProject.accessories_version}"
-    compileOnly "org.sinytra.forgified-fabric-api:fabric-api-base:${rootProject.forgified_fabric_api_base_version}"
     compileOnly "maven.modrinth:owo-lib:${rootProject.owo_version}"
     if (providers.gradleProperty('withCurios').isPresent()) {
         runtimeOnly "maven.modrinth:curios:${rootProject.curios_version}"

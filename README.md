@@ -6,9 +6,9 @@ Keep But Penalty is a lightweight server-side NeoForge mod for packs and servers
 
 ## Default behavior
 
-- Keeps vanilla inventory, Curios, and Accessories slots at their own death-drop boundaries.
+- Keeps player inventory through a death-scoped projection of vanilla `keepInventory` behavior.
 - Does not modify or save the world's real `keepInventory` gamerule.
-- Does not copy, serialize, or restore inventories.
+- Does not copy inventories or own item drops/player clones.
 - Applies no experience, durability, or respawn-effect penalty by default.
 
 ## Optional penalties
@@ -41,7 +41,7 @@ enableDurabilityPenalty = false
 durabilityLoss = 80
 ```
 
-Curios and Accessories are optional. When installed, their equipped slots participate in inventory retention; durability penalties remain separately configurable.
+Curios and Accessories are optional. Their equipped slots participate only when the corresponding mod is installed and durability penalties are enabled.
 
 ## Supported versions
 

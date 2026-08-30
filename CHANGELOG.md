@@ -1,9 +1,7 @@
 # Changelog
 
-## 1.1.1 — 2026-08-30
+## 1.1.1 — 2026-08-29
 
-- Retain vanilla player inventory directly at `Player.dropEquipment` when configured, without changing the persisted world gamerule.
-- Override Curios and Accessories death-drop policies to keep every equipped slot, including Aether bridge accessories.
 - Saturate consecutive-death counts at the integer limit instead of wrapping to zero after an imported or long-lived maximum streak.
 
 ## 1.1.0 — 2026-08-29
