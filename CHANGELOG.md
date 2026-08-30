@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2 — 2026-08-30
+
+- Require RinLib 1.0.1 so the death-scoped `keepInventory` projection owns the complete gamerule read without replacing vanilla death drops.
+
 ## 1.1.1 — 2026-08-29
 
 - Saturate consecutive-death counts at the integer limit instead of wrapping to zero after an imported or long-lived maximum streak.

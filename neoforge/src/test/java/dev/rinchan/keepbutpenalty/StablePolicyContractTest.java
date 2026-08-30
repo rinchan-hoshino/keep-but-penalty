@@ -35,7 +35,10 @@ class StablePolicyContractTest {
         assertTrue(serverMixin.contains("method = \"die\""));
         assertTrue(serverMixin.contains("method = \"restoreFrom\""));
         assertTrue(serverMixin.contains("dev.rinchan.rinlib.minecraft.KeepInventoryProjection"));
+        assertFalse(serverMixin.contains("dropEquipment"));
+        assertFalse(serverMixin.contains("CallbackInfo.cancel"));
         assertTrue(build.contains("rinlib-neoforge"));
+        assertTrue(readSource("gradle.properties").contains("rinlib_version=1.0.1+1.21.1"));
     }
 
     @Test
