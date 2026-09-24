@@ -1,5 +1,7 @@
 # Keep But Penalty
 
+<img src="docs/artwork/icon.png" alt="Keep But Penalty" width="128" height="128">
+
 **Keep your inventory. Choose the cost of death.**
 
 Keep But Penalty is a lightweight server-side NeoForge mod for packs and servers that want vanilla-owned inventory retention without grave recovery loops or persistent world-rule changes.
