@@ -6,14 +6,14 @@
 
 Keep But Penalty is a lightweight server-side NeoForge mod for packs and servers that want vanilla-owned inventory retention without grave recovery loops or persistent world-rule changes.
 
-## Default behavior
+## How it works
 
 - Keeps player inventory through a death-scoped projection of vanilla `keepInventory` behavior.
 - Does not modify or save the world's real `keepInventory` gamerule.
 - Does not copy inventories or own item drops/player clones.
 - Applies no experience, durability, or respawn-effect penalty by default.
 
-## Optional penalties
+## Configuration
 
 The common config can enable:
 
@@ -45,7 +45,7 @@ durabilityLoss = 80
 
 Curios and Accessories are optional. Their equipped slots participate only when the corresponding mod is installed and durability penalties are enabled.
 
-## Supported versions
+## Compatibility
 
 The maintained release matrix follows modpack anchor versions rather than every Minecraft point release. One Keep But Penalty source line supports:
 
@@ -53,7 +53,7 @@ The maintained release matrix follows modpack anchor versions rather than every 
 - Minecraft 26.1.2
 - Minecraft 26.2
 
-RinLib 0.3.1 or newer is required.
+RinLib is bundled; no separate installation is needed.
 
 ## Upgrading from 0.1.6
 
@@ -69,7 +69,7 @@ Minecraft 26.x uses the renamed rule key:
 /gamerule minecraft:keep_inventory false
 ```
 
-## Downloads
+## Download
 
 - [Modrinth](https://modrinth.com/mod/keep-but-penalty)
 - [GitHub Releases](https://github.com/rinchan-hoshino/keep-but-penalty/releases)
