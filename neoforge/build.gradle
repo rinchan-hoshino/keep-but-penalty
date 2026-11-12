@@ -57,7 +57,16 @@ neoForge {
 neoForge.ideSyncTask tasks.named('generateModMetadata')
 
 dependencies {
-    implementation "dev.rinchan:rinlib-neoforge:${rootProject.rinlib_version}"
+    def rinlib = "dev.rinchan:rinlib-neoforge:${rootProject.rinlib_version}"
+    if (rootProject.hasProperty('rinlibNeoJar')) {
+        def localJar = file(rootProject.property('rinlibNeoJar'))
+        repositories { flatDir { dirs localJar.parentFile } }
+        rinlib = dependencies.create("dev.rinchan:rinlib-neoforge:${rootProject.rinlib_version}") {
+            artifact { name = localJar.name - '.jar'; type = 'jar'; extension = 'jar' }
+        }
+    }
+    implementation rinlib
+    jarJar rinlib
     compileOnly "maven.modrinth:curios:${rootProject.curios_version}"
     compileOnly "maven.modrinth:accessories:${rootProject.accessories_version}"
     compileOnly "maven.modrinth:owo-lib:${rootProject.owo_version}"

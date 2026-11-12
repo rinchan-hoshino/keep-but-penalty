@@ -38,7 +38,7 @@ class StablePolicyContractTest {
         assertFalse(serverMixin.contains("dropEquipment"));
         assertFalse(serverMixin.contains("CallbackInfo.cancel"));
         assertTrue(build.contains("rinlib-neoforge"));
-        assertTrue(readSource("gradle.properties").contains("rinlib_version=1.0.1+1.21.1"));
+        assertTrue(readSource("gradle.properties").contains("rinlib_version=2.0.1+1.21.1"));
     }
 
     @Test

@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+// TAIL of addAdditionalSaveData and readAdditionalSaveData: the streak is stored in the player save so it survives restarts, and TAIL keeps vanilla data first.
 @Mixin(ServerPlayer.class)
 abstract class DeathStreakPersistenceMixin implements DeathStreakAccess {
     @Unique private static final String KEEP_BUT_PENALTY_STREAK_DEATHS = "keep_but_penalty:streak_deaths";

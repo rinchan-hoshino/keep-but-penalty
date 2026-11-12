@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;
 
+// WrapMethod on die and restoreFrom: the death-scoped keepInventory projection must cover the whole vanilla death and respawn call.
 @Mixin(ServerPlayer.class)
 abstract class ServerPlayerMixin {
     @WrapMethod(method = "die")
