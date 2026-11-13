@@ -2,7 +2,7 @@ package dev.rinchan.keepbutpenalty;
 
 import dev.rinchan.keepbutpenalty.compat.AccessoriesCompat;
 import dev.rinchan.keepbutpenalty.compat.CuriosCompat;
-import dev.rinchan.rinlib.minecraft.MobEffectState;
+import dev.rinchan.keepbutpenalty.rinlib.api.MobEffectState;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Set;

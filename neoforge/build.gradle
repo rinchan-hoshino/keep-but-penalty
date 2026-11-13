@@ -16,7 +16,6 @@ sourceSets.main.resources.srcDir tasks.register('generateModMetadata', ProcessRe
         minecraft_version_range: rootProject.minecraft_version_range,
         neo_version_range      : rootProject.neo_version_range,
         loader_version_range   : rootProject.loader_version_range,
-        rinlib_version_range   : "[${rootProject.rinlib_version},)",
         mod_id                 : rootProject.mod_id,
         mod_name               : rootProject.mod_name,
         mod_license            : rootProject.mod_license,
@@ -57,16 +56,6 @@ neoForge {
 neoForge.ideSyncTask tasks.named('generateModMetadata')
 
 dependencies {
-    def rinlib = "dev.rinchan:rinlib-neoforge:${rootProject.rinlib_version}"
-    if (rootProject.hasProperty('rinlibNeoJar')) {
-        def localJar = file(rootProject.property('rinlibNeoJar'))
-        repositories { flatDir { dirs localJar.parentFile } }
-        rinlib = dependencies.create("dev.rinchan:rinlib-neoforge:${rootProject.rinlib_version}") {
-            artifact { name = localJar.name - '.jar'; type = 'jar'; extension = 'jar' }
-        }
-    }
-    implementation rinlib
-    jarJar rinlib
     compileOnly "maven.modrinth:curios:${rootProject.curios_version}"
     compileOnly "maven.modrinth:accessories:${rootProject.accessories_version}"
     compileOnly "maven.modrinth:owo-lib:${rootProject.owo_version}"

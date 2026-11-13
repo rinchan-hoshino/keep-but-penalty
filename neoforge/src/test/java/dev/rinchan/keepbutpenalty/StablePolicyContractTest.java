@@ -34,11 +34,11 @@ class StablePolicyContractTest {
         assertTrue(serverMixin.contains("ReentrantFlag.Scope"));
         assertTrue(serverMixin.contains("method = \"die\""));
         assertTrue(serverMixin.contains("method = \"restoreFrom\""));
-        assertTrue(serverMixin.contains("dev.rinchan.rinlib.minecraft.KeepInventoryProjection"));
+        assertTrue(serverMixin.contains("dev.rinchan.keepbutpenalty.rinlib.minecraft.KeepInventoryProjection"));
         assertFalse(serverMixin.contains("dropEquipment"));
         assertFalse(serverMixin.contains("CallbackInfo.cancel"));
-        assertTrue(build.contains("rinlib-neoforge"));
-        assertTrue(readSource("gradle.properties").contains("rinlib_version=2.0.1+1.21.1"));
+        assertFalse(build.contains("rinlib"));
+        assertFalse(readSource("gradle.properties").contains("rinlib_version"));
     }
 
     @Test
