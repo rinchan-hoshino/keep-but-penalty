@@ -2,6 +2,11 @@
 
 All notable changes to **Keep But Penalty** are documented in this file.
 
+## [2.0.1] - 2026-11-20
+
+### Changed
+- **Safer default for `allowBreak`**: Changed the default value of `durability.allowBreak` from `true` to `false` so items are clamped to at least 1 durability remaining by default instead of breaking on death. Setting `allowBreak = true` continues to invoke standard vanilla `ItemStack.hurtAndBreak(...)` (or delegate to anti-break mods).
+
 ## [2.0.0] - 2026-11-20
 
 ### Added

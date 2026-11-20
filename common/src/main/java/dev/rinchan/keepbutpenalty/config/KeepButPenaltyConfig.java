@@ -16,7 +16,7 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * Zero-dependency TOML configuration for Keep But Penalty 2.0.0.
+ * Zero-dependency TOML configuration for Keep But Penalty 2.0.1.
  * Stored at config/keep_but_penalty.toml; automatically migrates legacy
  * config/keep_but_penalty-common.toml on first startup without data loss.
  */
@@ -127,7 +127,7 @@ public final class KeepButPenaltyConfig {
                 DurabilityPenaltyMode.PERCENT_MAX,
                 0.10D,
                 80,
-                true,
+                false,
                 true,
                 true,
                 true,
@@ -255,7 +255,7 @@ public final class KeepButPenaltyConfig {
 
     public String toToml() {
         StringBuilder sb = new StringBuilder();
-        sb.append("# Keep But Penalty 2.0.0 Configuration\n");
+        sb.append("# Keep But Penalty 2.0.1 Configuration\n");
         sb.append("# Changes saved in-game take effect immediately.\n\n");
 
         sb.append("[death]\n");

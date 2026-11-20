@@ -25,7 +25,7 @@ class KeepButPenaltyConfigTest {
         assertEquals(DurabilityPenaltyMode.PERCENT_MAX, cfg.penaltyMode());
         assertEquals(0.10D, cfg.durabilityPercent(), 1e-6);
         assertEquals(80, cfg.durabilityFlat());
-        assertTrue(cfg.allowBreak());
+        assertFalse(cfg.allowBreak());
         assertTrue(cfg.damageCurios());
         assertTrue(cfg.damageTrinkets());
         assertTrue(cfg.damageAccessories());

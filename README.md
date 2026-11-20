@@ -11,7 +11,7 @@ Keep But Penalty is a lightweight, zero-dependency multi-loader mod for **Fabric
 - **Death-Scoped Keep Inventory**: Temporarily projects `keepInventory = true` via a reentrant `ThreadLocal` only while `ServerPlayer.die` and `ServerPlayer.restoreFrom` execute. Your world's real `keepInventory` gamerule is never altered.
 - **Exact Experience Penalty**: Defaults to keeping **75%** of total experience (25% lost). Computes `experienceLevel`, `experienceProgress`, and `totalExperience` directly with exact vanilla math—never calling `giveExperiencePoints`, so XP pickup events and Mending are never spuriously triggered.
 - **Fair Durability Penalty**: Defaults to **10% of max durability** (`PERCENT_MAX`) or optional fixed points (`FLAT`), with `IdentityHashMap` deduplication across armor, hands, and optional **Curios**, **Trinkets**, and **Accessories** slots.
-  - **Vanilla-Decoupled Breaking Protocol**: When `allowBreak = true` and an item reaches max damage, Keep But Penalty invokes standard vanilla `ItemStack.hurtAndBreak(...)`—destroying the item cleanly in vanilla (no `0/max` ghost armor) and naturally integrating with any anti-break mod (such as *Keep My Sword*) with zero hardcoded coupling. Vanilla Elytra always stops at `maxDamage - 1` (broken-wing state).
+  - **Safe-by-Default & Vanilla-Decoupled Breaking Protocol**: Defaults to `allowBreak = false`, clamping durability loss to keep at least 1 durability remaining so items never shatter from death penalties. When explicitly set to `allowBreak = true` and an item reaches max damage, Keep But Penalty invokes standard vanilla `ItemStack.hurtAndBreak(...)`—destroying the item cleanly in vanilla (no `0/max` ghost armor) or naturally letting anti-break mods (such as *Keep My Sword*) take over with zero hardcoded coupling. Vanilla Elytra always stops at `maxDamage - 1` (broken-wing state).
   - **Item & Tag Exclusions**: Exempt specific items or `#tags` via `excludedItems` (pre-configured with `#keep_but_penalty:excluded`, `#tconstruct:modifiable`, `#tetra:modular_items`, and `#slashblade:swords`).
 - **Anti-Suicide Hunger Preservation**: Preserves below-full hunger across death with a configurable floor (`minRespawnFoodLevel = 6`, 3 drumsticks) so players cannot reset hunger by dying while preventing starvation loops.
 - **Progressive Respawn Debuffs**: Optional configurable status effects with consecutive-death duration scaling, persisted in player NBT.
@@ -40,7 +40,7 @@ enableDurabilityPenalty = true
 penaltyMode = "PERCENT_MAX"
 durabilityPercent = 0.1
 durabilityFlat = 80
-allowBreak = true
+allowBreak = false
 damageArmor = true
 damageMainHand = true
 damageOffHand = true
