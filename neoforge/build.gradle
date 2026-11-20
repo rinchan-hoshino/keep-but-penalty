@@ -17,8 +17,19 @@ sourceSets.main.java.srcDir root.file("common/src/${apiLayer}/java")
 sourceSets.main.resources.srcDir root.file('common/src/main/resources')
 sourceSets.main.resources.srcDir root.file("common/src/${apiLayer}/resources")
 sourceSets.test.java.srcDir root.file('common/src/test/java')
+sourceSets.test.java.srcDir root.file("common/src/${apiLayer}/test/java")
 sourceSets.test.compileClasspath += sourceSets.main.compileClasspath
 sourceSets.test.runtimeClasspath += sourceSets.main.runtimeClasspath
+
+def enablePackagedE2E = (root.minecraft_version == '1.21.1')
+if (enablePackagedE2E) {
+    sourceSets {
+        e2e {
+            compileClasspath += sourceSets.main.compileClasspath + files(tasks.named('jar'))
+            runtimeClasspath += sourceSets.main.runtimeClasspath
+        }
+    }
+}
 sourceSets.main.resources.srcDir tasks.register('generateModMetadata', ProcessResources) {
     def replaceProperties = [
         minecraft_version_range: root.minecraft_version_range,
@@ -45,19 +56,55 @@ neoForge {
         "${modId}" {
             sourceSet(sourceSets.main)
         }
+        if (enablePackagedE2E) {
+            keep_but_penalty_e2e {
+                sourceSet(sourceSets.e2e)
+            }
+        }
     }
     unitTest {
         enable()
         testedMod = mods."${modId}"
     }
     runs {
-        client { client() }
+        client {
+            client()
+            loadedMods = [mods."${modId}"]
+        }
         server {
             server()
             programArgument '--nogui'
+            loadedMods = [mods."${modId}"]
+        }
+        if (enablePackagedE2E) {
+            gameTestServer {
+                type = "gameTestServer"
+                gameDirectory = layout.buildDirectory.dir('run-e2e')
+                loadedMods = [mods.keep_but_penalty_e2e]
+                systemProperty 'neoforge.enabledGameTestNamespaces', 'keep_but_penalty_e2e'
+            }
         }
         configureEach {
             logLevel = org.slf4j.event.Level.INFO
+        }
+    }
+}
+
+if (enablePackagedE2E) {
+    def stagePackagedJarForE2E = tasks.register('stagePackagedJarForE2E', Sync) {
+        dependsOn tasks.named('jar')
+        from(tasks.named('jar').flatMap { it.archiveFile })
+        into(layout.buildDirectory.dir('run-e2e/mods'))
+    }
+    tasks.named('compileE2eJava').configure {
+        dependsOn tasks.named('jar')
+    }
+    afterEvaluate {
+        tasks.named('runGameTestServer').configure {
+            dependsOn stagePackagedJarForE2E
+        }
+        tasks.named('check').configure {
+            dependsOn tasks.named('runGameTestServer')
         }
     }
 }
@@ -71,6 +118,10 @@ dependencies {
 }
 
 tasks.named('test', Test) {
+    dependsOn tasks.named('jar')
+    systemProperty 'kbp.jar', tasks.named('jar').get().archiveFile.get().asFile.absolutePath
+    systemProperty 'kbp.projectRoot', rootProject.projectDir.absolutePath
+    systemProperty 'kbp.apiLayer', rootProject.api_layer
     useJUnitPlatform()
 }
 

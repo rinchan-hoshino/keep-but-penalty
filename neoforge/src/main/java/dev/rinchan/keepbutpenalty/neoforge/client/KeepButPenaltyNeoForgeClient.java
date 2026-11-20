@@ -1,4 +1,4 @@
-package dev.rinchan.keepbutpenalty.neoforge;
+package dev.rinchan.keepbutpenalty.neoforge.client;
 
 import dev.rinchan.keepbutpenalty.KeepButPenalty;
 import dev.rinchan.keepbutpenalty.client.KeepButPenaltyConfigScreen;

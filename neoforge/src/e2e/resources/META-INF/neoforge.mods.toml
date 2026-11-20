@@ -1,0 +1,23 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="GPL-3.0-or-later"
+
+[[mods]]
+modId="keep_but_penalty_e2e"
+version="1.0.0"
+displayName="Keep But Penalty E2E Harness"
+description='''Black-box packaged-JAR GameTest E2E verification harness.'''
+
+[[dependencies.keep_but_penalty_e2e]]
+modId="neoforge"
+type="required"
+versionRange="[21.1.0,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.keep_but_penalty_e2e]]
+modId="keep_but_penalty"
+type="required"
+versionRange="[2.0.0,)"
+ordering="AFTER"
+side="BOTH"

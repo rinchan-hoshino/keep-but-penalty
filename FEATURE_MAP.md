@@ -41,9 +41,9 @@ common/src/main/java/dev/rinchan/keepbutpenalty/
 
 ## Loader Entrypoints
 
-- **Fabric** (`fabric/`): `KeepButPenaltyFabric` (`ModInitializer`), `KeepButPenaltyModMenu` (`ModMenuApi` via compile-only stub).
-- **Forge** (`forge/`): `KeepButPenaltyForge` (`@Mod`, `ConfigScreenHandler.ConfigScreenFactory`).
-- **NeoForge** (`neoforge/`): `KeepButPenaltyNeoForge` (`@Mod`), `KeepButPenaltyNeoForgeClient` (`@Mod(dist = Dist.CLIENT)`, `IConfigScreenFactory`).
+- **Fabric** (`fabric/`): `KeepButPenaltyFabric` (`ModInitializer`), `client.KeepButPenaltyModMenu` (`ModMenuApi` via compile-only stub).
+- **Forge** (`forge/`): `KeepButPenaltyForge` (`@Mod`), `client.KeepButPenaltyForgeClient` (`ConfigScreenHandler.ConfigScreenFactory`).
+- **NeoForge** (`neoforge/`): `KeepButPenaltyNeoForge` (`@Mod`), `client.KeepButPenaltyNeoForgeClient` (`@Mod(dist = Dist.CLIENT)`, `IConfigScreenFactory`).
 
 ## Configuration & Invariants
 
@@ -56,3 +56,18 @@ common/src/main/java/dev/rinchan/keepbutpenalty/
   - `allowBreak = true`: skips stacks already `>= maxDamage`; sets `maxDamage - 1` then invokes standard `ItemStack.hurtAndBreak(max(1, maxDamage * 16), ...)`.
 - **Hunger Preservation**: Only applies when pre-death `foodLevel < 20`; restores `max(minRespawnFoodLevel, beforeFood)` and `min(beforeSaturation, newFood)`.
 - **Legacy Migration**: First boot without `keep_but_penalty.toml` reads `keep_but_penalty-common.toml`; active legacy durability penalties migrate to `FLAT` using legacy `durabilityLoss`, while inactive ones default to `PERCENT_MAX`.
+
+## Verification Gates
+
+Enable the local `pre-push` hook and run the complete verification suite (native with JDK 17/21/25, or reproducible container via `Dockerfile.verify`):
+
+```bash
+./scripts/setup-hooks.sh
+./scripts/verify.sh [--container]
+```
+
+| Gate | Implementation | Command |
+| :--- | :--- | :--- |
+| **1. Packaged-JAR Real Runtime E2E** | `neoforge/src/e2e/.../KeepButPenaltyGameTests.java` (loads real built `keep_but_penalty-neoforge-*.jar` from `mods/` into Minecraft `1.21.1` `gameTestServer`: `ServerPlayer.die()` → `PlayerList.respawn()`, inventory retention, `-10%` durability & `allowBreak=false` 1-durability floor, `-25%` exact XP, anti-suicide hunger floor `6`, progressive debuffs, Totem of Undying & cancelled `LivingDeathEvent` zero-penalty) + `ConfigScreenLifecycleTest.java` | `python3 scripts/verify-e2e.py` (or `./gradlew :neoforge:check -Pminecraft_version=1.21.1 -Ploader=neoforge`) |
+| **2. Property Invariant Fuzzing** | `common/src/test/.../PenaltyInvariantsPropertyTest.java` (fixed-seed `2,000` iterations per property across XP 0..200 inverse/retention, durability `allowBreak=false/true` & Elytra, hunger floor/saturation, and death-streak monotonic schedule) | `./gradlew :neoforge:test --tests '*PropertyTest' -Pminecraft_version=1.21.1 -Ploader=neoforge` |
+| **3. Architecture Guardrails** | `common/src/test/.../ArchitectureContractTest.java` + `scripts/build-matrix.py` (Dedicated Server client-class isolation, Mixin bidirectional closure `mixins.json` ↔ bytecode & `@Mixin` sources, clean package redline: zero `rinlib`, zero `com/terraformersmc/modmenu` stub leakage across all 8 JARs) | `./gradlew :neoforge:test --tests '*ArchitectureContractTest' -Pminecraft_version=1.21.1 -Ploader=neoforge` & `python3 scripts/build-matrix.py` |

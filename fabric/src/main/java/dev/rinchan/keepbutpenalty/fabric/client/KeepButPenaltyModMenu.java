@@ -1,4 +1,4 @@
-package dev.rinchan.keepbutpenalty.fabric;
+package dev.rinchan.keepbutpenalty.fabric.client;
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory;
 import com.terraformersmc.modmenu.api.ModMenuApi;

@@ -14,7 +14,7 @@
       "dev.rinchan.keepbutpenalty.fabric.KeepButPenaltyFabric"
     ],
     "modmenu": [
-      "dev.rinchan.keepbutpenalty.fabric.KeepButPenaltyModMenu"
+      "dev.rinchan.keepbutpenalty.fabric.client.KeepButPenaltyModMenu"
     ]
   },
   "mixins": [

@@ -61,6 +61,15 @@ Zero external library dependencies—single self-contained JAR per target:
 | `26.1.2` | Fabric, NeoForge | Curios, Trinkets, Accessories |
 | `26.2` | Fabric, NeoForge | Curios, Trinkets, Accessories |
 
+## Building & Verification
+
+Enable the local `pre-push` verification hook and run the full verification suite (8-target build, JUnit + property fuzzing, architecture bytecode guardrails, and packaged-JAR Minecraft runtime E2E):
+
+```bash
+./scripts/setup-hooks.sh
+./scripts/verify.sh [--container]
+```
+
 ## Download
 
 - [Modrinth](https://modrinth.com/mod/keep-but-penalty)
