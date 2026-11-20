@@ -1,1 +1,26 @@
-{}
+{
+  "screen.keep_but_penalty.title": "死亡保留但惩罚 · 设置",
+  "screen.keep_but_penalty.keep_inventory": "死亡不掉落",
+  "screen.keep_but_penalty.skip_on_pvp": "PvP 豁免",
+  "screen.keep_but_penalty.xp_penalty": "经验惩罚",
+  "screen.keep_but_penalty.xp_keep_ratio": "经验保留：%s%%",
+  "screen.keep_but_penalty.durability_penalty": "耐久惩罚",
+  "screen.keep_but_penalty.penalty_mode": "扣减模式",
+  "screen.keep_but_penalty.mode.percent_max": "最大百分比",
+  "screen.keep_but_penalty.mode.flat": "固定点数",
+  "screen.keep_but_penalty.durability_percent": "耐久扣减：%s%%",
+  "screen.keep_but_penalty.durability_flat": "耐久扣减：%s 点",
+  "screen.keep_but_penalty.allow_break": "允许损毁",
+  "screen.keep_but_penalty.preserve_hunger": "保留饥饿值",
+  "screen.keep_but_penalty.min_respawn_food": "保底饱食：%s",
+  "screen.keep_but_penalty.show_summary": "重生结算提示",
+  "screen.keep_but_penalty.reset": "恢复默认",
+  "screen.keep_but_penalty.cancel": "取消",
+  "screen.keep_but_penalty.save": "保存",
+  "message.keep_but_penalty.summary.prefix": "死亡代价：%s",
+  "message.keep_but_penalty.summary.xp": "经验 -%s%% (-%s XP)",
+  "message.keep_but_penalty.summary.durability_percent": "装备耐久 -%s%%",
+  "message.keep_but_penalty.summary.durability_flat": "装备耐久 -%s",
+  "message.keep_but_penalty.summary.hunger": "饱食 %s/20",
+  "message.keep_but_penalty.summary.debuffs": "负面效果 x%s"
+}

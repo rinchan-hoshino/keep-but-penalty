@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "dev.rinchan.keepbutpenalty.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "DeathStreakPersistenceMixin",
+    "GameRulesMixin",
+    "PlayerListMixin",
+    "ServerPlayerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,1 +1,26 @@
-{}
+{
+  "screen.keep_but_penalty.title": "Keep But Penalty Settings",
+  "screen.keep_but_penalty.keep_inventory": "Keep Inventory",
+  "screen.keep_but_penalty.skip_on_pvp": "Skip on PvP",
+  "screen.keep_but_penalty.xp_penalty": "XP Penalty",
+  "screen.keep_but_penalty.xp_keep_ratio": "XP Kept: %s%%",
+  "screen.keep_but_penalty.durability_penalty": "Durability Penalty",
+  "screen.keep_but_penalty.penalty_mode": "Mode",
+  "screen.keep_but_penalty.mode.percent_max": "% Max",
+  "screen.keep_but_penalty.mode.flat": "Flat",
+  "screen.keep_but_penalty.durability_percent": "Durability Loss: %s%%",
+  "screen.keep_but_penalty.durability_flat": "Durability Loss: %s",
+  "screen.keep_but_penalty.allow_break": "Allow Break",
+  "screen.keep_but_penalty.preserve_hunger": "Preserve Hunger",
+  "screen.keep_but_penalty.min_respawn_food": "Min Food: %s",
+  "screen.keep_but_penalty.show_summary": "Respawn Summary",
+  "screen.keep_but_penalty.reset": "Reset",
+  "screen.keep_but_penalty.cancel": "Cancel",
+  "screen.keep_but_penalty.save": "Save",
+  "message.keep_but_penalty.summary.prefix": "Death Penalty: %s",
+  "message.keep_but_penalty.summary.xp": "XP -%s%% (-%s XP)",
+  "message.keep_but_penalty.summary.durability_percent": "Durability -%s%%",
+  "message.keep_but_penalty.summary.durability_flat": "Durability -%s",
+  "message.keep_but_penalty.summary.hunger": "Hunger %s/20",
+  "message.keep_but_penalty.summary.debuffs": "Debuffs x%s"
+}

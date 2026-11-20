@@ -2,72 +2,64 @@
 
 <img src="docs/artwork/icon.png" alt="Keep But Penalty" width="128" height="128">
 
-**Keep your inventory. Choose the cost of death.**
+**Keep your inventory. Pay a fair price for death.**
 
-Keep But Penalty is a lightweight server-side NeoForge mod for packs and servers that want vanilla-owned inventory retention without grave recovery loops or persistent world-rule changes.
+Keep But Penalty is a lightweight, zero-dependency multi-loader mod for **Fabric**, **Forge**, and **NeoForge** that keeps player inventories on death without mutating the world's `keepInventory` gamerule—while replacing tedious corpse runs with fair, configurable experience, durability, hunger, and progressive respawn debuff penalties.
 
-## How it works
+## Highlights
 
-- Keeps player inventory through a death-scoped projection of vanilla `keepInventory` behavior.
-- Does not modify or save the world's real `keepInventory` gamerule.
-- Does not copy inventories or own item drops/player clones.
-- Applies no experience, durability, or respawn-effect penalty by default.
+- **Death-Scoped Keep Inventory**: Temporarily projects `keepInventory = true` via a reentrant `ThreadLocal` only while `ServerPlayer.die` and `ServerPlayer.restoreFrom` execute. Your world's real `keepInventory` gamerule is never altered.
+- **Exact Experience Penalty**: Defaults to keeping **75%** of total experience (25% lost). Computes `experienceLevel`, `experienceProgress`, and `totalExperience` directly with exact vanilla math—never calling `giveExperiencePoints`, so XP pickup events and Mending are never spuriously triggered.
+- **Fair Durability Penalty**: Defaults to **10% of max durability** (`PERCENT_MAX`) or optional fixed points (`FLAT`), with `IdentityHashMap` deduplication across armor, hands, and optional **Curios**, **Trinkets**, and **Accessories** slots.
+  - **Vanilla-Decoupled Breaking Protocol**: When `allowBreak = true` and an item reaches max damage, Keep But Penalty invokes standard vanilla `ItemStack.hurtAndBreak(...)`—destroying the item cleanly in vanilla (no `0/max` ghost armor) and naturally integrating with any anti-break mod (such as *Keep My Sword*) with zero hardcoded coupling. Vanilla Elytra always stops at `maxDamage - 1` (broken-wing state).
+  - **Item & Tag Exclusions**: Exempt specific items or `#tags` via `excludedItems` (pre-configured with `#keep_but_penalty:excluded`, `#tconstruct:modifiable`, `#tetra:modular_items`, and `#slashblade:swords`).
+- **Anti-Suicide Hunger Preservation**: Preserves below-full hunger across death with a configurable floor (`minRespawnFoodLevel = 6`, 3 drumsticks) so players cannot reset hunger by dying while preventing starvation loops.
+- **Progressive Respawn Debuffs**: Optional configurable status effects with consecutive-death duration scaling, persisted in player NBT.
+- **Respawn Actionbar Summary**: Displays a concise one-line summary of actual death costs on respawn (suppressed when no penalty occurred).
+- **In-Game Config Screen & 4 Languages**: Native zero-dependency `KeepButPenaltyConfigScreen` accessible via Mod Menu (Fabric) or the Mods screen (Forge / NeoForge), with full **English**, **简体中文**, **繁體中文**, and **日本語** localization.
 
 ## Configuration
 
-The common config can enable:
-
-- A retained fraction of total vanilla experience.
-- Direct durability loss for armor, hands, Curios, and Accessories equipment.
-- Any configured respawn debuffs using `effect_id,duration_seconds,level` entries.
-
-Example:
+Stored at `config/keep_but_penalty.toml` (edits saved in-game take effect immediately). Legacy `config/keep_but_penalty-common.toml` files from 1.x are automatically migrated on first startup without data loss.
 
 ```toml
 [death]
 keepInventory = true
 enableExperiencePenalty = true
-experienceKeepRatio = 0.333333333
-respawnDebuffs = [
-  "minecraft:weakness,60,2",
-  "minecraft:mining_fatigue,60,2",
-  "minecraft:slowness,60,2"
-]
-# Optional progressive durations by consecutive final death. Empty keeps the
-# per-effect durations above. Entries beyond the list reuse its last value.
-respawnDebuffDurationsSecondsByDeath = [0, 5, 10, 15, 20]
+experienceKeepRatio = 0.75
+preserveHungerOnDeath = true
+minRespawnFoodLevel = 6
+skipOnPvp = false
+respawnDebuffs = []
+respawnDebuffDurationsSecondsByDeath = []
 respawnDebuffStreakResetSeconds = 600
+showRespawnSummary = true
 
 [durability]
-enableDurabilityPenalty = false
-durabilityLoss = 80
+enableDurabilityPenalty = true
+penaltyMode = "PERCENT_MAX"
+durabilityPercent = 0.1
+durabilityFlat = 80
+allowBreak = true
+damageArmor = true
+damageMainHand = true
+damageOffHand = true
+damageCurios = true
+damageTrinkets = true
+damageAccessories = true
+excludedItems = ["#keep_but_penalty:excluded", "#tconstruct:modifiable", "#tetra:modular_items", "#slashblade:swords"]
 ```
 
-Curios and Accessories are optional. Their equipped slots participate only when the corresponding mod is installed and durability penalties are enabled.
+## Supported Versions & Loaders
 
-## Compatibility
+Zero external library dependencies—single self-contained JAR per target:
 
-The maintained release matrix follows modpack anchor versions rather than every Minecraft point release. One Keep But Penalty source line supports:
-
-- Minecraft 1.21.1
-- Minecraft 26.1.2
-- Minecraft 26.2
-
-RinLib is bundled; no separate installation is needed.
-
-## Upgrading from 0.1.6
-
-Version 0.1.6 wrote `keepInventory=true` into existing worlds. Stable releases never mutate that rule and cannot infer the administrator's original intent. Reset legacy worlds once if the vanilla baseline should be restored:
-
-```mcfunction
-/gamerule keepInventory false
-```
-
-Minecraft 26.x uses the renamed rule key:
-
-```mcfunction
-/gamerule minecraft:keep_inventory false
-```
+| Minecraft | Loaders | Optional Accessory Compat |
+| :--- | :--- | :--- |
+| `1.20.1` | Fabric, Forge | Curios, Trinkets, Accessories |
+| `1.21.1` | Fabric, NeoForge | Curios, Trinkets, Accessories |
+| `26.1.2` | Fabric, NeoForge | Curios, Trinkets, Accessories |
+| `26.2` | Fabric, NeoForge | Curios, Trinkets, Accessories |
 
 ## Download
 

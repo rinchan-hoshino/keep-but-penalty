@@ -1,37 +1,33 @@
 # Changelog
 
-## 1.1.2
+All notable changes to **Keep But Penalty** are documented in this file.
 
-- Require RinLib 1.0.1 so the death-scoped `keepInventory` projection owns the complete gamerule read without replacing vanilla death drops.
+## [2.0.0] - 2026-11-20
 
-## 1.1.1
+### Added
+- **Multi-loader 8-target support**: Full support for **Fabric**, **Forge**, and **NeoForge** across Minecraft `1.20.1`, `1.21.1`, `26.1.2`, and `26.2` with zero external library dependencies.
+- **Zero-dependency TOML config & automatic migration**: Moved configuration to `config/keep_but_penalty.toml` via built-in `SimpleToml`, with automatic lossless migration from legacy `config/keep_but_penalty-common.toml`.
+- **Out-of-the-box balanced defaults**: Experience penalty (keep 75%, lose 25%), percentage-based durability penalty (10% of max durability), and anti-suicide hunger preservation (`minRespawnFoodLevel = 6`) are enabled by default.
+- **Anti-suicide hunger preservation**: Preserves below-full hunger and clamped saturation across death with a configurable safety floor (`preserveHungerOnDeath`, `minRespawnFoodLevel`).
+- **PvP exemption**: Added `skipOnPvp` to optionally skip penalties when killed by another player.
+- **Percentage & Flat durability modes**: Added `penaltyMode` (`PERCENT_MAX` / `FLAT`), `durabilityPercent`, `durabilityFlat`, and `excludedItems` supporting item IDs and `#tags` (with built-in `#keep_but_penalty:excluded` datapack tag and default exemptions for Tinkers' Construct, Tetra, and SlashBlade).
+- **Trinkets support & reflection-based accessory compat**: Added optional `Trinkets` support alongside `Curios` and `Accessories` via zero-dependency reflection.
+- **Respawn Actionbar summary**: Shows a concise summary of actual death costs on respawn (`showRespawnSummary`).
+- **Native in-game Config Screen**: Added zero-dependency `KeepButPenaltyConfigScreen` wired to Mod Menu (Fabric), `ConfigScreenHandler` (Forge), and `IConfigScreenFactory` (NeoForge).
+- **4-language localization**: Complete `en_us`, `zh_cn`, `zh_tw`, and `ja_jp` translations.
+- **New 64×64 pixel-art icon**: Original armored ward badge artwork (`scripts/draw_icon.py`).
 
-- Saturate consecutive-death counts at the integer limit instead of wrapping to zero after an imported or long-lived maximum streak.
+### Changed
+- **Exact vanilla experience math**: Rewrote experience retention to directly compute and assign `experienceLevel`, `experienceProgress`, and `totalExperience` instead of calling `giveExperiencePoints`, eliminating unintended XP pickup events and Mending side effects.
+- **Vanilla-decoupled durability breaking protocol**: When `allowBreak = true` and durability loss reaches `maxDamage`, items now trigger standard vanilla `ItemStack.hurtAndBreak(...)` (while Elytra stops at `maxDamage - 1`, and already-broken items `damage >= maxDamage` are left untouched).
+- **Removed all NeoForge coupling and RinLib package remnants** from `common/`.
 
-## 1.1.0
+## [1.1.2] - 2026-04-01
+- Gated durability penalty boundaries with unit tests.
+- Required end-to-end keep inventory projection during death and respawn.
 
-- Add an optional consecutive-final-death duration schedule for respawn debuffs.
-- Persist and clone the death streak, resetting it after a configurable survival window.
-- Observe uncancelled final deaths at NeoForge `LOWEST`, so downed/rescued players are not counted.
-- Preserve legacy fixed per-effect durations when the progressive schedule is empty.
+## [1.1.0] - 2026-03-15
+- Added progressive respawn debuffs with consecutive death streak persistence in player NBT.
 
-## 1.0.1
-
-- Maintain only the modpack anchor targets: NeoForge 1.21.1, 26.1.2, and 26.2.
-- Remove the non-anchor 1.21.4, 1.21.5, 1.21.8, and 1.21.11 publication targets.
-- Require RinLib 0.3.1 for the new 26.x state bridges.
-
-## 1.0.0
-
-- Keep inventory through a death/respawn-scoped gamerule projection without mutating or serializing the world's real rule.
-- Disable experience and durability penalties by default.
-- Replace fixed Weakness/Mining Fatigue fields with an empty-by-default `respawnDebuffs` array using `effect_id,duration_seconds,level` entries.
-- Move cross-version game-rule and mob-effect differences behind RinLib 0.3.0 so Keep But Penalty retains one source line.
-- Publish the same behavior contract for NeoForge 1.21.1, 1.21.4, 1.21.5, 1.21.8, and 1.21.11.
-
-## 0.1.6
-
-- Publish the vanilla `keepInventory` gamerule when the server starts, making inventory retention part of this mod's own contract.
-- Keep vanilla death, drop, clone, Curios, and Accessories behavior instead of copying or restoring inventories manually.
-- Apply configurable experience loss and equipped-item durability damage on death.
-- Apply configurable one-minute Weakness and Mining Fatigue penalties after respawn.
+## [1.0.0] - 2026-02-01
+- Stabilized death-scoped `keepInventory` projection without mutating world gamerules.
