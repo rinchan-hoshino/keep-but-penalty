@@ -20,7 +20,7 @@ Keep But Penalty is a lightweight, zero-dependency multi-loader mod for **Fabric
 
 ## Configuration
 
-Stored at `config/keep_but_penalty.toml` (edits saved in-game take effect immediately). Legacy `config/keep_but_penalty-common.toml` files from 1.x are automatically migrated on first startup without data loss.
+Stored at `config/keep_but_penalty.toml` (edits saved in-game take effect immediately).
 
 ```toml
 [death]
