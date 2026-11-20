@@ -62,7 +62,9 @@ if [[ "$IN_CONTAINER" -eq 0 ]]; then
         echo "[verify] Running full verification suite inside container..."
         exec "${RUNTIME}" run --rm --init \
             -v "${ROOT}:/workspace" \
-            -v rinchan-gradle-cache:/root/.gradle \
+            -v rinchan-gradle-cache-kbp:/root/.gradle \
+            -e ORG_GRADLE_PROJECT_neoform_decompile_maxMemory=2g \
+            -e GRADLE_OPTS="-Dorg.gradle.jvmargs=-Xmx2560m" \
             -w /workspace \
             "${IMAGE_NAME}" \
             bash scripts/verify.sh --in-container

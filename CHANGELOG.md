@@ -2,6 +2,12 @@
 
 All notable changes to **Keep But Penalty** are documented in this file.
 
+## [2.0.2] - 2026-11-20
+
+### Fixed
+- **Dedicated Server isolation**: Moved client-only config screen registration and client lifecycle classes into dedicated client packages (`KeepButPenaltyForgeClient`, `KeepButPenaltyNeoForgeClient`, `KeepButPenaltyModMenu`) so dedicated servers never load client GUI classes.
+- **Verification**: Validated across the 8-target build matrix, JUnit/Property tests, packaged-JAR architecture contracts, and real Minecraft 1.21.1 NeoForge GameTest E2E.
+
 ## [2.0.1] - 2026-11-20
 
 ### Changed
