@@ -76,7 +76,7 @@ export JAVA_21_HOME="$(find_jdk 21)"
 export JAVA_25_HOME="$(find_jdk 25)"
 
 cd "${ROOT}"
-echo "[verify] Step 1/2: Full 8-target matrix build + JUnit + Property (>=1,000) + Architecture + JAR checks..."
+echo "[verify] Step 1/2: Full 10-target matrix build + JUnit + Property (>=1,000) + Architecture + JAR checks..."
 python3 scripts/build-matrix.py
 
 echo "[verify] Step 2/2: Packaged-JAR real Minecraft 1.21.1 NeoForge E2E + ConfigScreen lifecycle..."

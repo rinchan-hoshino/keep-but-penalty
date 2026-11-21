@@ -2,6 +2,15 @@
 
 All notable changes to **Keep But Penalty** are documented in this file.
 
+## [2.0.3] - 2026-11-21
+
+### Fixed
+- **1.20.1 Forge `pack.mcmeta` fix**: Added `pack.mcmeta` (`pack_format: 15`) to the Forge template resources to eliminate the `ResourcePackInfo` startup warning on Minecraft `1.20.1` Forge without affecting other targets.
+
+### Added
+- **Minecraft `26.3` support**: Added `26.3` profiles for Fabric and NeoForge, expanding the build matrix to 10 targets.
+- **Verification**: Enforced `pack.mcmeta` JAR audit assertions and validated all 10 targets across the full verification suite.
+
 ## [2.0.2] - 2026-11-20
 
 ### Fixed

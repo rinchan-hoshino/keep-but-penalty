@@ -60,10 +60,11 @@ Zero external library dependencies—single self-contained JAR per target:
 | `1.21.1` | Fabric, NeoForge | Curios, Trinkets, Accessories |
 | `26.1.2` | Fabric, NeoForge | Curios, Trinkets, Accessories |
 | `26.2` | Fabric, NeoForge | Curios, Trinkets, Accessories |
+| `26.3` | Fabric, NeoForge | Curios, Trinkets, Accessories |
 
 ## Building & Verification
 
-Enable the local `pre-push` verification hook and run the full verification suite (8-target build, JUnit + property fuzzing, architecture bytecode guardrails, and packaged-JAR Minecraft runtime E2E):
+Enable the local `pre-push` verification hook and run the full verification suite (10-target build, JUnit + property fuzzing, architecture bytecode guardrails, and packaged-JAR Minecraft runtime E2E):
 
 ```bash
 ./scripts/setup-hooks.sh

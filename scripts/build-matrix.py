@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build all 8 supported loader/version targets from profiles.json and verify zero-dependency budgets."""
+"""Build all supported loader/version targets from profiles.json and verify zero-dependency budgets."""
 import argparse
 import fcntl
 import hashlib
@@ -76,12 +76,22 @@ def read_constant_pool_utf8s(data: bytes) -> list[str]:
     return utf8s
 
 
-def verify_jar(jar_path: Path):
+def verify_jar(jar_path: Path, minecraft: str, loader: str):
     size = jar_path.stat().st_size
     if size >= MAX_JAR_BYTES:
         raise RuntimeError(f"JAR exceeds 120KB budget: {jar_path.name} ({size} bytes)")
     with zipfile.ZipFile(jar_path) as zf:
         names = set(zf.namelist())
+        if minecraft == "1.20.1" and loader == "forge":
+            if "pack.mcmeta" not in names:
+                raise RuntimeError(f"Missing pack.mcmeta in 1.20.1 forge JAR: {jar_path.name}")
+            pack_meta = json.loads(zf.read("pack.mcmeta").decode("utf-8"))
+            if pack_meta.get("pack", {}).get("pack_format") != 15:
+                raise RuntimeError(f"Expected pack.pack_format == 15 in {jar_path.name}, got: {pack_meta}")
+        elif "pack.mcmeta" in names:
+            pack_meta = json.loads(zf.read("pack.mcmeta").decode("utf-8"))
+            if pack_meta.get("pack", {}).get("pack_format") == 15:
+                raise RuntimeError(f"Unexpected pack_format == 15 pack.mcmeta in non-1.20.1-forge JAR: {jar_path.name}")
         if "keep_but_penalty.mixins.json" not in names:
             raise RuntimeError(f"Missing keep_but_penalty.mixins.json in {jar_path.name}")
         mixin_cfg = json.loads(zf.read("keep_but_penalty.mixins.json").decode("utf-8"))
@@ -134,6 +144,9 @@ def main():
         if line.startswith("mod_version=")
     )
     output = ROOT / "build/releases"
+    if not args.profile and output.exists():
+        for stale_jar in output.glob("*.jar"):
+            stale_jar.unlink()
     output.mkdir(parents=True, exist_ok=True)
     lock = (ROOT / "build/matrix.lock").open("w")
     fcntl.flock(lock, fcntl.LOCK_EX)
@@ -174,7 +187,7 @@ def main():
             )
             target = output / f"keep-but-penalty-{version}+{minecraft}-{loader}.jar"
             shutil.copy2(source, target)
-            verify_jar(target)
+            verify_jar(target, minecraft, loader)
             binary = target.read_bytes()
             manifest.append(
                 dict(
