@@ -53,27 +53,3 @@ damageTrinkets = true
 damageAccessories = true
 excludedItems = ["#keep_but_penalty:excluded", "#tconstruct:modifiable", "#tetra:modular_items", "#slashblade:swords"]
 ```
-
-## Supported Versions
-
-Standalone JAR with no required library mods.
-
-| Minecraft | Loaders | Optional Slot Support |
-| :--- | :--- | :--- |
-| `1.20.1` | Fabric, Forge | Curios, Trinkets, Accessories |
-| `1.21.1` | Fabric, NeoForge | Curios, Trinkets, Accessories |
-| `26.1.2` | Fabric, NeoForge | Curios, Trinkets, Accessories |
-| `26.2` | Fabric, NeoForge | Curios, Trinkets, Accessories |
-| `26.3` | Fabric, NeoForge | Curios, Trinkets, Accessories |
-
-## Building
-
-```bash
-./scripts/setup-hooks.sh
-./scripts/verify.sh [--container]
-```
-
-## Download
-
-- [Modrinth](https://modrinth.com/mod/keep-but-penalty)
-- [GitHub Releases](https://github.com/rinchan-hoshino/keep-but-penalty/releases)
