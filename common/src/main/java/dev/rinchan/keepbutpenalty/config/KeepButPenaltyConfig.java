@@ -55,6 +55,7 @@ public final class KeepButPenaltyConfig {
     private final boolean damageArmor;
     private final boolean damageMainHand;
     private final boolean damageOffHand;
+    private final boolean damageHotbar;
     private final boolean damageInventory;
     private final boolean damageCurios;
     private final boolean damageTrinkets;
@@ -81,6 +82,7 @@ public final class KeepButPenaltyConfig {
             boolean damageArmor,
             boolean damageMainHand,
             boolean damageOffHand,
+            boolean damageHotbar,
             boolean damageInventory,
             boolean damageCurios,
             boolean damageTrinkets,
@@ -106,6 +108,7 @@ public final class KeepButPenaltyConfig {
         this.damageArmor = damageArmor;
         this.damageMainHand = damageMainHand;
         this.damageOffHand = damageOffHand;
+        this.damageHotbar = damageHotbar;
         this.damageInventory = damageInventory;
         this.damageCurios = damageCurios;
         this.damageTrinkets = damageTrinkets;
@@ -134,7 +137,8 @@ public final class KeepButPenaltyConfig {
                 true,
                 true,
                 true,
-                true,
+                false,
+                false,
                 true,
                 true,
                 true,
@@ -226,6 +230,7 @@ public final class KeepButPenaltyConfig {
         boolean dmgArmor = readBool(raw, "durability.damageArmor", "damageArmor", d.damageArmor);
         boolean dmgMain = readBool(raw, "durability.damageMainHand", "damageMainHand", d.damageMainHand);
         boolean dmgOff = readBool(raw, "durability.damageOffHand", "damageOffHand", d.damageOffHand);
+        boolean dmgHotbar = readBool(raw, "durability.damageHotbar", "damageHotbar", d.damageHotbar);
         boolean dmgInventory = readBool(raw, "durability.damageInventory", "damageInventory", d.damageInventory);
         boolean dmgCurios = readBool(raw, "durability.damageCurios", "damageCurios", d.damageCurios);
         boolean dmgTrinkets = readBool(raw, "durability.damageTrinkets", "damageTrinkets", d.damageTrinkets);
@@ -251,6 +256,7 @@ public final class KeepButPenaltyConfig {
                 dmgArmor,
                 dmgMain,
                 dmgOff,
+                dmgHotbar,
                 dmgInventory,
                 dmgCurios,
                 dmgTrinkets,
@@ -300,7 +306,9 @@ public final class KeepButPenaltyConfig {
         sb.append("damageArmor = ").append(damageArmor).append('\n');
         sb.append("damageMainHand = ").append(damageMainHand).append('\n');
         sb.append("damageOffHand = ").append(damageOffHand).append('\n');
-        sb.append("# Apply durability penalty to damageable tools/weapons stored in the hotbar and main inventory.\n");
+        sb.append("# Apply durability penalty to damageable items in hotbar slots (0-8).\n");
+        sb.append("damageHotbar = ").append(damageHotbar).append('\n');
+        sb.append("# Apply durability penalty to damageable items in main inventory slots (9-35, excluding hotbar).\n");
         sb.append("damageInventory = ").append(damageInventory).append('\n');
         sb.append("damageCurios = ").append(damageCurios).append('\n');
         sb.append("damageTrinkets = ").append(damageTrinkets).append('\n');
@@ -454,6 +462,7 @@ public final class KeepButPenaltyConfig {
     public boolean damageArmor() { return damageArmor; }
     public boolean damageMainHand() { return damageMainHand; }
     public boolean damageOffHand() { return damageOffHand; }
+    public boolean damageHotbar() { return damageHotbar; }
     public boolean damageInventory() { return damageInventory; }
     public boolean damageCurios() { return damageCurios; }
     public boolean damageTrinkets() { return damageTrinkets; }
@@ -471,6 +480,7 @@ public final class KeepButPenaltyConfig {
             double durabilityPercent,
             int durabilityFlat,
             boolean allowBreak,
+            boolean damageHotbar,
             boolean damageInventory,
             boolean preserveHungerOnDeath,
             int minRespawnFoodLevel,
@@ -495,6 +505,7 @@ public final class KeepButPenaltyConfig {
                 this.damageArmor,
                 this.damageMainHand,
                 this.damageOffHand,
+                damageHotbar,
                 damageInventory,
                 this.damageCurios,
                 this.damageTrinkets,

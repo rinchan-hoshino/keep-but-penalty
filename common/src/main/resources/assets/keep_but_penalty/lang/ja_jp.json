@@ -11,6 +11,7 @@
   "screen.keep_but_penalty.durability_percent": "耐久減少: %s%%",
   "screen.keep_but_penalty.durability_flat": "耐久減少: %s",
   "screen.keep_but_penalty.allow_break": "破損を許可",
+  "screen.keep_but_penalty.damage_hotbar": "ホットバー耐久減少",
   "screen.keep_but_penalty.damage_inventory": "インベントリ耐久減少",
   "screen.keep_but_penalty.preserve_hunger": "満腹度を保持",
   "screen.keep_but_penalty.min_respawn_food": "最低満腹度: %s",

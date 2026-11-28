@@ -2,6 +2,11 @@
 
 All notable changes to **Keep But Penalty** are documented in this file.
 
+## [2.0.5] - 2026-11-28
+
+### Changed
+- **Split hotbar & main inventory durability toggles (`damageHotbar`, `damageInventory`)**: Separated `durability.damageHotbar` (hotbar slots `0–8`) and `durability.damageInventory` (main inventory slots `9–35`, excluding the hotbar) into two independent options, both **disabled (`false`) by default**. By default, only equipped armor, active main-hand, off-hand, and accessory slots receive durability wear; opt in independently via `config/keep_but_penalty.toml` or the in-game Config Screen across all versions (`1.20.1`, `1.21.1`, `26.x`). `IdentityHashMap` deduplication guarantees the active main-hand item is never penalized twice when both `damageMainHand` and `damageHotbar` are enabled.
+
 ## [2.0.4] - 2026-11-28
 
 ### Added

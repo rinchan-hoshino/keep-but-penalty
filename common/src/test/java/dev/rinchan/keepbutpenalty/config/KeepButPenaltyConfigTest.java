@@ -29,7 +29,8 @@ class KeepButPenaltyConfigTest {
         assertTrue(cfg.damageArmor());
         assertTrue(cfg.damageMainHand());
         assertTrue(cfg.damageOffHand());
-        assertTrue(cfg.damageInventory());
+        assertFalse(cfg.damageHotbar());
+        assertFalse(cfg.damageInventory());
         assertTrue(cfg.damageCurios());
         assertTrue(cfg.damageTrinkets());
         assertTrue(cfg.damageAccessories());
@@ -52,7 +53,7 @@ class KeepButPenaltyConfigTest {
                 0.15D,
                 120,
                 false,
-                true, false, true, false, false, true, false,
+                true, false, true, true, false, false, true, false,
                 List.of("#keep_but_penalty:excluded", "minecraft:netherite_sword")
         );
         KeepButPenaltyConfig parsed = KeepButPenaltyConfig.parse(original.toToml(), false);
@@ -68,12 +69,13 @@ class KeepButPenaltyConfigTest {
         assertEquals(original.durabilityFlat(), parsed.durabilityFlat());
         assertEquals(original.allowBreak(), parsed.allowBreak());
         assertEquals(original.damageMainHand(), parsed.damageMainHand());
+        assertEquals(original.damageHotbar(), parsed.damageHotbar());
         assertEquals(original.damageInventory(), parsed.damageInventory());
         assertEquals(original.excludedItems(), parsed.excludedItems());
     }
 
     @Test
-    void existingTomlWithoutDamageInventoryDefaultsToTrue() {
+    void existingTomlWithoutDamageHotbarOrInventoryDefaultsToFalse() {
         String existing = """
                 [durability]
                 enableDurabilityPenalty = true
@@ -82,7 +84,8 @@ class KeepButPenaltyConfigTest {
                 damageOffHand = true
                 """;
         KeepButPenaltyConfig parsed = KeepButPenaltyConfig.parse(existing, false);
-        assertTrue(parsed.damageInventory());
+        assertFalse(parsed.damageHotbar());
+        assertFalse(parsed.damageInventory());
     }
 
     @Test

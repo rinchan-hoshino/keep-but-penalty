@@ -367,35 +367,23 @@ public final class KeepButPenaltyGameTests {
     }
 
     @GameTest(template = EMPTY_TEMPLATE, templateNamespace = KeepButPenaltyE2EMod.MOD_ID)
-    public static void inventoryToolsPenalizedOnceAndRespectExclusions(GameTestHelper helper) {
+    public static void hotbarAndInventoryDurabilityTogglesRespectBoundariesAndDedup(GameTestHelper helper) {
         ServerLevel level = helper.getLevel();
         level.getGameRules().getRule(GameRules.RULE_KEEPINVENTORY).set(false, level.getServer());
-        writeAndReloadConfig("""
-                [death]
-                keepInventory = true
-                enableExperiencePenalty = false
-
-                [durability]
-                enableDurabilityPenalty = true
-                penaltyMode = "PERCENT_MAX"
-                durabilityPercent = 0.1
-                allowBreak = false
-                damageArmor = true
-                damageMainHand = true
-                damageOffHand = true
-                damageInventory = true
-                excludedItems = ["#keep_but_penalty:excluded", "minecraft:diamond_shovel"]
-                """);
 
         ConnectedPlayer conn = spawnRealPlayer(level, "E2EInvDamage");
         ServerPlayer active = conn.player();
         try {
+            ItemStack helmet = new ItemStack(Items.DIAMOND_HELMET);
             ItemStack mainHandSword = new ItemStack(Items.DIAMOND_SWORD);
+            ItemStack offHandShield = new ItemStack(Items.SHIELD);
             ItemStack hotbarPick = new ItemStack(Items.DIAMOND_PICKAXE);
             ItemStack bagAxe = new ItemStack(Items.DIAMOND_AXE);
             ItemStack excludedShovel = new ItemStack(Items.DIAMOND_SHOVEL);
             ItemStack food = new ItemStack(Items.COOKED_BEEF, 16);
 
+            active.setItemSlot(EquipmentSlot.HEAD, helmet);
+            active.setItemSlot(EquipmentSlot.OFFHAND, offHandShield);
             active.getInventory().selected = 0;
             active.getInventory().setItem(0, mainHandSword);
             active.getInventory().setItem(3, hotbarPick);
@@ -403,22 +391,14 @@ public final class KeepButPenaltyGameTests {
             active.getInventory().setItem(13, excludedShovel);
             active.getInventory().setItem(14, food);
 
-            active.hurt(level.damageSources().genericKill(), 1000.0f);
-            active = level.getServer().getPlayerList().respawn(active, false, Entity.RemovalReason.KILLED);
+            int sword10 = (int) Math.round(mainHandSword.getMaxDamage() * 0.10D);
+            int helmet10 = (int) Math.round(helmet.getMaxDamage() * 0.10D);
+            int shield10 = (int) Math.round(offHandShield.getMaxDamage() * 0.10D);
+            int pick10 = (int) Math.round(hotbarPick.getMaxDamage() * 0.10D);
+            int axe10 = (int) Math.round(bagAxe.getMaxDamage() * 0.10D);
 
-            int expected10Pct = (int) Math.round(mainHandSword.getMaxDamage() * 0.10D);
-            assertEq(helper, expected10Pct, active.getInventory().getItem(0).getDamageValue(),
-                    "Active main-hand sword must be damaged exactly once (never double-damaged)");
-            assertEq(helper, expected10Pct, active.getInventory().getItem(3).getDamageValue(),
-                    "Non-held hotbar pickaxe must be penalized when damageInventory=true");
-            assertEq(helper, expected10Pct, active.getInventory().getItem(12).getDamageValue(),
-                    "Main inventory axe must be penalized when damageInventory=true");
-            assertEq(helper, 0, active.getInventory().getItem(13).getDamageValue(),
-                    "Excluded inventory item must remain untouched");
-            assertEq(helper, 16, active.getInventory().getItem(14).getCount(),
-                    "Non-damageable food stack must remain untouched");
-
-            // Now toggle damageInventory = false and verify non-held tools take zero additional damage
+            // 1. Default: damageMainHand=true, damageHotbar=false, damageInventory=false
+            //    Only armor, active main-hand, and off-hand take damage.
             writeAndReloadConfig("""
                     [death]
                     keepInventory = true
@@ -432,7 +412,101 @@ public final class KeepButPenaltyGameTests {
                     damageArmor = true
                     damageMainHand = true
                     damageOffHand = true
+                    damageHotbar = false
                     damageInventory = false
+                    excludedItems = ["#keep_but_penalty:excluded", "minecraft:diamond_shovel"]
+                    """);
+
+            active.hurt(level.damageSources().genericKill(), 1000.0f);
+            active = level.getServer().getPlayerList().respawn(active, false, Entity.RemovalReason.KILLED);
+
+            assertEq(helper, helmet10, active.getItemBySlot(EquipmentSlot.HEAD).getDamageValue(),
+                    "Default config must penalize equipped armor");
+            assertEq(helper, sword10, active.getInventory().getItem(0).getDamageValue(),
+                    "Default config must penalize active main-hand item");
+            assertEq(helper, shield10, active.getItemBySlot(EquipmentSlot.OFFHAND).getDamageValue(),
+                    "Default config must penalize off-hand item");
+            assertEq(helper, 0, active.getInventory().getItem(3).getDamageValue(),
+                    "Default config must NOT penalize unselected hotbar item");
+            assertEq(helper, 0, active.getInventory().getItem(12).getDamageValue(),
+                    "Default config must NOT penalize main inventory item");
+
+            // 2. Hotbar-only with damageMainHand=true: slot 0 penalized once (no double-damage), slot 3 penalized, slot 12 untouched
+            writeAndReloadConfig("""
+                    [death]
+                    keepInventory = true
+                    enableExperiencePenalty = false
+
+                    [durability]
+                    enableDurabilityPenalty = true
+                    penaltyMode = "PERCENT_MAX"
+                    durabilityPercent = 0.1
+                    allowBreak = false
+                    damageArmor = false
+                    damageMainHand = true
+                    damageOffHand = false
+                    damageHotbar = true
+                    damageInventory = false
+                    excludedItems = ["#keep_but_penalty:excluded", "minecraft:diamond_shovel"]
+                    """);
+
+            active.getInventory().selected = 0;
+            active.hurt(level.damageSources().genericKill(), 1000.0f);
+            active = level.getServer().getPlayerList().respawn(active, false, Entity.RemovalReason.KILLED);
+
+            assertEq(helper, sword10 * 2, active.getInventory().getItem(0).getDamageValue(),
+                    "Active main-hand sword must be damaged exactly once when damageMainHand=true & damageHotbar=true");
+            assertEq(helper, pick10, active.getInventory().getItem(3).getDamageValue(),
+                    "Non-held hotbar pickaxe must be penalized when damageHotbar=true");
+            assertEq(helper, 0, active.getInventory().getItem(12).getDamageValue(),
+                    "Main inventory axe must NOT be penalized when damageHotbar=true & damageInventory=false");
+
+            // 3. Hotbar-only with damageMainHand=false: all hotbar slots (0..8 including selected) penalized once
+            writeAndReloadConfig("""
+                    [death]
+                    keepInventory = true
+                    enableExperiencePenalty = false
+
+                    [durability]
+                    enableDurabilityPenalty = true
+                    penaltyMode = "PERCENT_MAX"
+                    durabilityPercent = 0.1
+                    allowBreak = false
+                    damageArmor = false
+                    damageMainHand = false
+                    damageOffHand = false
+                    damageHotbar = true
+                    damageInventory = false
+                    excludedItems = ["#keep_but_penalty:excluded", "minecraft:diamond_shovel"]
+                    """);
+
+            active.getInventory().selected = 0;
+            active.hurt(level.damageSources().genericKill(), 1000.0f);
+            active = level.getServer().getPlayerList().respawn(active, false, Entity.RemovalReason.KILLED);
+
+            assertEq(helper, sword10 * 3, active.getInventory().getItem(0).getDamageValue(),
+                    "Selected hotbar slot must still be penalized once when damageMainHand=false & damageHotbar=true");
+            assertEq(helper, pick10 * 2, active.getInventory().getItem(3).getDamageValue(),
+                    "Unselected hotbar slot must be penalized when damageMainHand=false & damageHotbar=true");
+            assertEq(helper, 0, active.getInventory().getItem(12).getDamageValue(),
+                    "Main inventory axe must remain untouched when damageInventory=false");
+
+            // 4. Inventory-only (damageHotbar=false, damageInventory=true): slots 9..35 penalized, unselected hotbar 0..8 untouched
+            writeAndReloadConfig("""
+                    [death]
+                    keepInventory = true
+                    enableExperiencePenalty = false
+
+                    [durability]
+                    enableDurabilityPenalty = true
+                    penaltyMode = "PERCENT_MAX"
+                    durabilityPercent = 0.1
+                    allowBreak = false
+                    damageArmor = false
+                    damageMainHand = true
+                    damageOffHand = false
+                    damageHotbar = false
+                    damageInventory = true
                     excludedItems = ["#keep_but_penalty:excluded", "minecraft:diamond_shovel"]
                     """);
 
@@ -440,12 +514,48 @@ public final class KeepButPenaltyGameTests {
             active.hurt(level.damageSources().genericKill(), 1000.0f);
             active = level.getServer().getPlayerList().respawn(active, false, Entity.RemovalReason.KILLED);
 
-            assertEq(helper, expected10Pct, active.getInventory().getItem(0).getDamageValue(),
-                    "Unheld sword must not take extra damage when damageInventory=false");
-            assertEq(helper, expected10Pct, active.getInventory().getItem(3).getDamageValue(),
-                    "Unheld hotbar pickaxe must not take extra damage when damageInventory=false");
-            assertEq(helper, expected10Pct, active.getInventory().getItem(12).getDamageValue(),
-                    "Unheld bag axe must not take extra damage when damageInventory=false");
+            assertEq(helper, sword10 * 3, active.getInventory().getItem(0).getDamageValue(),
+                    "Unheld hotbar slot 0 must NOT be penalized when damageHotbar=false & damageInventory=true");
+            assertEq(helper, pick10 * 2, active.getInventory().getItem(3).getDamageValue(),
+                    "Unheld hotbar slot 3 must NOT be penalized when damageHotbar=false & damageInventory=true");
+            assertEq(helper, axe10, active.getInventory().getItem(12).getDamageValue(),
+                    "Main inventory axe (slot 12) must be penalized when damageInventory=true");
+            assertEq(helper, 0, active.getInventory().getItem(13).getDamageValue(),
+                    "Excluded main inventory item must remain untouched");
+            assertEq(helper, 16, active.getInventory().getItem(14).getCount(),
+                    "Non-damageable food stack must remain untouched");
+
+            // 5. Both enabled (damageHotbar=true, damageInventory=true): hotbar + main inventory penalized once each, no double-damage on active hand
+            writeAndReloadConfig("""
+                    [death]
+                    keepInventory = true
+                    enableExperiencePenalty = false
+
+                    [durability]
+                    enableDurabilityPenalty = true
+                    penaltyMode = "PERCENT_MAX"
+                    durabilityPercent = 0.1
+                    allowBreak = false
+                    damageArmor = false
+                    damageMainHand = true
+                    damageOffHand = false
+                    damageHotbar = true
+                    damageInventory = true
+                    excludedItems = ["#keep_but_penalty:excluded", "minecraft:diamond_shovel"]
+                    """);
+
+            active.getInventory().selected = 0;
+            active.hurt(level.damageSources().genericKill(), 1000.0f);
+            active = level.getServer().getPlayerList().respawn(active, false, Entity.RemovalReason.KILLED);
+
+            assertEq(helper, sword10 * 4, active.getInventory().getItem(0).getDamageValue(),
+                    "Active main-hand sword must be penalized once when both damageHotbar and damageInventory are true");
+            assertEq(helper, pick10 * 3, active.getInventory().getItem(3).getDamageValue(),
+                    "Hotbar pickaxe must be penalized when both damageHotbar and damageInventory are true");
+            assertEq(helper, axe10 * 2, active.getInventory().getItem(12).getDamageValue(),
+                    "Main inventory axe must be penalized when both damageHotbar and damageInventory are true");
+            assertEq(helper, 0, active.getInventory().getItem(13).getDamageValue(),
+                    "Excluded item must remain untouched when both are true");
             helper.succeed();
         } finally {
             cleanupPlayer(level, active, conn.channel());

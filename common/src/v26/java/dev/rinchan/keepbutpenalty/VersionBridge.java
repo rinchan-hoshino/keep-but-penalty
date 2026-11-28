@@ -51,14 +51,19 @@ public final class VersionBridge {
         player.sendOverlayMessage(message);
     }
 
-    public static void forEachInventoryItem(ServerPlayer player, boolean skipMainHand, Consumer<ItemStack> consumer) {
-        var inv = player.getInventory();
-        var items = inv.getNonEquipmentItems();
-        int selected = inv.getSelectedSlot();
-        for (int i = 0; i < items.size(); i++) {
-            if (skipMainHand && i == selected) {
-                continue;
-            }
+    private static final int HOTBAR_SIZE = 9;
+
+    public static void forEachHotbarItem(ServerPlayer player, Consumer<ItemStack> consumer) {
+        var items = player.getInventory().getNonEquipmentItems();
+        int end = Math.min(HOTBAR_SIZE, items.size());
+        for (int i = 0; i < end; i++) {
+            consumer.accept(items.get(i));
+        }
+    }
+
+    public static void forEachMainInventoryItem(ServerPlayer player, Consumer<ItemStack> consumer) {
+        var items = player.getInventory().getNonEquipmentItems();
+        for (int i = HOTBAR_SIZE; i < items.size(); i++) {
             consumer.accept(items.get(i));
         }
     }

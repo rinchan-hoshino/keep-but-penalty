@@ -21,6 +21,7 @@ public final class KeepButPenaltyConfigScreen extends Screen {
     private double durabilityPercent;
     private int durabilityFlat;
     private boolean allowBreak;
+    private boolean damageHotbar;
     private boolean damageInventory;
     private boolean preserveHungerOnDeath;
     private int minRespawnFoodLevel;
@@ -42,6 +43,7 @@ public final class KeepButPenaltyConfigScreen extends Screen {
         this.durabilityPercent = cfg.durabilityPercent();
         this.durabilityFlat = cfg.durabilityFlat();
         this.allowBreak = cfg.allowBreak();
+        this.damageHotbar = cfg.damageHotbar();
         this.damageInventory = cfg.damageInventory();
         this.preserveHungerOnDeath = cfg.preserveHungerOnDeath();
         this.minRespawnFoodLevel = cfg.minRespawnFoodLevel();
@@ -117,7 +119,18 @@ public final class KeepButPenaltyConfigScreen extends Screen {
                         (btn, value) -> this.allowBreak = value));
         y += stepY;
 
-        // Row 5: Preserve Hunger | Min Respawn Food
+        // Row 5: Damage Hotbar | Damage Inventory
+        this.addRenderableWidget(CycleButton.onOffBuilder(this.damageHotbar)
+                .create(left, y, colW, 20,
+                        Component.translatable("screen.keep_but_penalty.damage_hotbar"),
+                        (btn, value) -> this.damageHotbar = value));
+        this.addRenderableWidget(CycleButton.onOffBuilder(this.damageInventory)
+                .create(right, y, colW, 20,
+                        Component.translatable("screen.keep_but_penalty.damage_inventory"),
+                        (btn, value) -> this.damageInventory = value));
+        y += stepY;
+
+        // Row 6: Preserve Hunger | Min Respawn Food
         this.addRenderableWidget(CycleButton.onOffBuilder(this.preserveHungerOnDeath)
                 .create(left, y, colW, 20,
                         Component.translatable("screen.keep_but_penalty.preserve_hunger"),
@@ -129,13 +142,9 @@ public final class KeepButPenaltyConfigScreen extends Screen {
                 v -> this.minRespawnFoodLevel = v));
         y += stepY;
 
-        // Row 6: Damage Inventory | Show Respawn Summary
-        this.addRenderableWidget(CycleButton.onOffBuilder(this.damageInventory)
-                .create(left, y, colW, 20,
-                        Component.translatable("screen.keep_but_penalty.damage_inventory"),
-                        (btn, value) -> this.damageInventory = value));
+        // Row 7: Show Respawn Summary
         this.addRenderableWidget(CycleButton.onOffBuilder(this.showRespawnSummary)
-                .create(right, y, colW, 20,
+                .create(left, y, totalW, 20,
                         Component.translatable("screen.keep_but_penalty.show_summary"),
                         (btn, value) -> this.showRespawnSummary = value));
 
@@ -173,6 +182,7 @@ public final class KeepButPenaltyConfigScreen extends Screen {
                 this.durabilityPercent,
                 this.durabilityFlat,
                 this.allowBreak,
+                this.damageHotbar,
                 this.damageInventory,
                 this.preserveHungerOnDeath,
                 this.minRespawnFoodLevel,

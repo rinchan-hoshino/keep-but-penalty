@@ -91,8 +91,12 @@ public final class KeepButPenalty {
             if (config.damageOffHand()) {
                 damageStack(player, player.getOffhandItem(), EquipmentSlot.OFFHAND, seen, config, durabilityCounts);
             }
+            if (config.damageHotbar()) {
+                VersionBridge.forEachHotbarItem(player, stack ->
+                        damageStack(player, stack, null, seen, config, durabilityCounts));
+            }
             if (config.damageInventory()) {
-                VersionBridge.forEachInventoryItem(player, config.damageMainHand(), stack ->
+                VersionBridge.forEachMainInventoryItem(player, stack ->
                         damageStack(player, stack, null, seen, config, durabilityCounts));
             }
             if (config.damageCurios()) {

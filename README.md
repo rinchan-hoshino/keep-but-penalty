@@ -14,7 +14,7 @@
 
 - **Keep your gear, leave world gamerules intact**: Players keep their inventory, armor, offhand, and curios/trinkets on death while your world's `keepInventory` gamerule stays untouched.
 - **Configurable XP loss**: Keep a set percentage of total experience (default `75%`, losing `25%`). Experience is recalculated cleanly on respawn without triggering XP orb sounds or Mending repairs.
-- **Equipment & inventory durability wear**: Deducts a percentage of max durability (default `10%`) or a flat amount from equipped armor, held items, damageable tools and weapons in your hotbar/inventory (`damageInventory = true`), and optional **Curios**, **Trinkets**, or **Accessories** slots.
+- **Equipment durability wear**: Deducts a percentage of max durability (default `10%`) or a flat amount from equipped armor, held items, optional **Curios**, **Trinkets**, or **Accessories** slots, plus optional toggles for damageable items in your hotbar (`damageHotbar = false`) and main inventory (`damageInventory = false`).
   - **Won't shatter your gear by default**: With `allowBreak = false` (default), death wear stops at `1` durability so penalties never destroy an item outright. If you opt into `allowBreak = true`, items reaching `0` break normally (and respect anti-break mods like *Keep My Sword*). Vanilla Elytra always stops at its `1`-durability broken-wing state.
   - **Item & tag exclusions**: Skip specific items or tags via `excludedItems` (`#keep_but_penalty:excluded`, Tinkers' Construct, Tetra, and SlashBlade tools are excluded by default).
 - **No dying to refill hunger**: Preserves below-full hunger across death with a configurable floor (`minRespawnFoodLevel = 6`, 3 drumsticks), preventing both free hunger resets and endless starvation loops.
@@ -48,7 +48,8 @@ allowBreak = false
 damageArmor = true
 damageMainHand = true
 damageOffHand = true
-damageInventory = true
+damageHotbar = false
+damageInventory = false
 damageCurios = true
 damageTrinkets = true
 damageAccessories = true
