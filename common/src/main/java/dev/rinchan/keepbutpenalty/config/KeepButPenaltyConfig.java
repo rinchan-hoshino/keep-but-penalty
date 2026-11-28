@@ -55,6 +55,7 @@ public final class KeepButPenaltyConfig {
     private final boolean damageArmor;
     private final boolean damageMainHand;
     private final boolean damageOffHand;
+    private final boolean damageInventory;
     private final boolean damageCurios;
     private final boolean damageTrinkets;
     private final boolean damageAccessories;
@@ -80,6 +81,7 @@ public final class KeepButPenaltyConfig {
             boolean damageArmor,
             boolean damageMainHand,
             boolean damageOffHand,
+            boolean damageInventory,
             boolean damageCurios,
             boolean damageTrinkets,
             boolean damageAccessories,
@@ -104,6 +106,7 @@ public final class KeepButPenaltyConfig {
         this.damageArmor = damageArmor;
         this.damageMainHand = damageMainHand;
         this.damageOffHand = damageOffHand;
+        this.damageInventory = damageInventory;
         this.damageCurios = damageCurios;
         this.damageTrinkets = damageTrinkets;
         this.damageAccessories = damageAccessories;
@@ -128,6 +131,7 @@ public final class KeepButPenaltyConfig {
                 0.10D,
                 80,
                 false,
+                true,
                 true,
                 true,
                 true,
@@ -222,6 +226,7 @@ public final class KeepButPenaltyConfig {
         boolean dmgArmor = readBool(raw, "durability.damageArmor", "damageArmor", d.damageArmor);
         boolean dmgMain = readBool(raw, "durability.damageMainHand", "damageMainHand", d.damageMainHand);
         boolean dmgOff = readBool(raw, "durability.damageOffHand", "damageOffHand", d.damageOffHand);
+        boolean dmgInventory = readBool(raw, "durability.damageInventory", "damageInventory", d.damageInventory);
         boolean dmgCurios = readBool(raw, "durability.damageCurios", "damageCurios", d.damageCurios);
         boolean dmgTrinkets = readBool(raw, "durability.damageTrinkets", "damageTrinkets", d.damageTrinkets);
         boolean dmgAccessories = readBool(raw, "durability.damageAccessories", "damageAccessories", d.damageAccessories);
@@ -246,6 +251,7 @@ public final class KeepButPenaltyConfig {
                 dmgArmor,
                 dmgMain,
                 dmgOff,
+                dmgInventory,
                 dmgCurios,
                 dmgTrinkets,
                 dmgAccessories,
@@ -294,6 +300,8 @@ public final class KeepButPenaltyConfig {
         sb.append("damageArmor = ").append(damageArmor).append('\n');
         sb.append("damageMainHand = ").append(damageMainHand).append('\n');
         sb.append("damageOffHand = ").append(damageOffHand).append('\n');
+        sb.append("# Apply durability penalty to damageable tools/weapons stored in the hotbar and main inventory.\n");
+        sb.append("damageInventory = ").append(damageInventory).append('\n');
         sb.append("damageCurios = ").append(damageCurios).append('\n');
         sb.append("damageTrinkets = ").append(damageTrinkets).append('\n');
         sb.append("damageAccessories = ").append(damageAccessories).append('\n');
@@ -446,6 +454,7 @@ public final class KeepButPenaltyConfig {
     public boolean damageArmor() { return damageArmor; }
     public boolean damageMainHand() { return damageMainHand; }
     public boolean damageOffHand() { return damageOffHand; }
+    public boolean damageInventory() { return damageInventory; }
     public boolean damageCurios() { return damageCurios; }
     public boolean damageTrinkets() { return damageTrinkets; }
     public boolean damageAccessories() { return damageAccessories; }
@@ -462,6 +471,7 @@ public final class KeepButPenaltyConfig {
             double durabilityPercent,
             int durabilityFlat,
             boolean allowBreak,
+            boolean damageInventory,
             boolean preserveHungerOnDeath,
             int minRespawnFoodLevel,
             boolean showRespawnSummary
@@ -485,6 +495,7 @@ public final class KeepButPenaltyConfig {
                 this.damageArmor,
                 this.damageMainHand,
                 this.damageOffHand,
+                damageInventory,
                 this.damageCurios,
                 this.damageTrinkets,
                 this.damageAccessories,

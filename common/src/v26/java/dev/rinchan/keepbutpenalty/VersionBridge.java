@@ -1,6 +1,7 @@
 package dev.rinchan.keepbutpenalty;
 
 import dev.rinchan.keepbutpenalty.config.ExclusionMatcher;
+import java.util.function.Consumer;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -48,5 +49,17 @@ public final class VersionBridge {
 
     public static void sendActionBar(ServerPlayer player, Component message) {
         player.sendOverlayMessage(message);
+    }
+
+    public static void forEachInventoryItem(ServerPlayer player, boolean skipMainHand, Consumer<ItemStack> consumer) {
+        var inv = player.getInventory();
+        var items = inv.getNonEquipmentItems();
+        int selected = inv.getSelectedSlot();
+        for (int i = 0; i < items.size(); i++) {
+            if (skipMainHand && i == selected) {
+                continue;
+            }
+            consumer.accept(items.get(i));
+        }
     }
 }

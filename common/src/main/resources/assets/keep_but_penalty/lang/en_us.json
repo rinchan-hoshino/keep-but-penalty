@@ -11,6 +11,7 @@
   "screen.keep_but_penalty.durability_percent": "Durability Loss: %s%%",
   "screen.keep_but_penalty.durability_flat": "Durability Loss: %s",
   "screen.keep_but_penalty.allow_break": "Allow Break",
+  "screen.keep_but_penalty.damage_inventory": "Damage Inventory",
   "screen.keep_but_penalty.preserve_hunger": "Preserve Hunger",
   "screen.keep_but_penalty.min_respawn_food": "Min Food: %s",
   "screen.keep_but_penalty.show_summary": "Respawn Summary",

@@ -2,6 +2,11 @@
 
 All notable changes to **Keep But Penalty** are documented in this file.
 
+## [2.0.4] - 2026-11-28
+
+### Added
+- **Inventory & hotbar durability penalty (`damageInventory`)**: Added `durability.damageInventory` (default `true`) and an in-game config toggle across all versions (`1.20.1`, `1.21.1`, `26.x`). Damageable tools and weapons carried in the hotbar or main inventory now receive the same death durability penalty even when not actively held in hand, with `IdentityHashMap` deduplication ensuring no item is ever penalized twice. Existing configs lacking `damageInventory` default to `true`; set `damageInventory = false` to restore equipped-only behavior.
+
 ## [2.0.3] - 2026-11-21
 
 ### Fixed

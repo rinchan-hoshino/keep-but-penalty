@@ -26,8 +26,8 @@ class ConfigScreenLifecycleTest {
         screen.height = 480;
 
         assertDoesNotThrow(() -> screen.init());
-        assertEquals(14, screen.children().size(),
-                "Expected 11 config controls + 3 action buttons (Reset/Cancel/Save)");
+        assertEquals(15, screen.children().size(),
+                "Expected 12 config controls + 3 action buttons (Reset/Cancel/Save)");
         assertDoesNotThrow(() -> screen.onClose());
     }
 
@@ -35,7 +35,7 @@ class ConfigScreenLifecycleTest {
     void initializesWidgetsInFlatModeWithoutExceptions() {
         KeepButPenaltyConfig flatCfg = KeepButPenaltyConfig.defaults().withScreenValues(
                 true, false, true, 0.75D, true,
-                DurabilityPenaltyMode.FLAT, 0.10D, 80, false,
+                DurabilityPenaltyMode.FLAT, 0.10D, 80, false, true,
                 true, 6, true
         );
         KeepButPenaltyConfig.setForTests(flatCfg);
@@ -45,8 +45,8 @@ class ConfigScreenLifecycleTest {
         screen.height = 360;
 
         assertDoesNotThrow(() -> screen.init());
-        assertEquals(14, screen.children().size(),
-                "Expected 11 config controls + 3 action buttons in FLAT mode");
+        assertEquals(15, screen.children().size(),
+                "Expected 12 config controls + 3 action buttons in FLAT mode");
         assertDoesNotThrow(() -> screen.onClose());
     }
 }
